@@ -1,13 +1,25 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/graphql-go/handler"
+
+	"github.com/can-z/pickup/server/gql"
+)
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+
+	schema := gql.Schema()
+
+	h := handler.New(&handler.Config{
+		Schema:   &schema,
+		Pretty:   false,
+		GraphiQL: true,
+	})
+
+	r.POST("/graphql", func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
 	})
 	return r
 }
