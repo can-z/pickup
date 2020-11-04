@@ -1,15 +1,18 @@
 package main
 
 import (
+	"github.com/can-z/pickup/server/gql"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/graphql-go/handler"
-
-	"github.com/can-z/pickup/server/gql"
 )
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://127.0.0.1:3000"}
+	config.AllowCredentials = true
+	r.Use(cors.New(config))
 	schema := gql.Schema()
 
 	h := handler.New(&handler.Config{
@@ -17,8 +20,10 @@ func setupRouter() *gin.Engine {
 		Pretty:   false,
 		GraphiQL: true,
 	})
-
 	r.POST("/graphql", func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	})
+	r.GET("/graphql", func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	})
 	return r

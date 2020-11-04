@@ -3,6 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+
+const client: ApolloClient = new ApolloClient({
+  uri: 'http://127.0.0.1:8080/graphql',
+  cache: new InMemoryCache()
+});
+
+client
+  .query({
+    query: gql`
+      {
+        hello
+      }
+    `
+  })
+  .then(result => console.log(result));
 
 ReactDOM.render(
   <React.StrictMode>
