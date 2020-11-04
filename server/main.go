@@ -11,7 +11,6 @@ func setupRouter() *gin.Engine {
 	r := gin.Default()
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"http://127.0.0.1:3000"}
-	config.AllowCredentials = true
 	r.Use(cors.New(config))
 	schema := gql.Schema()
 
