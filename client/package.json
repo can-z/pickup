@@ -12,6 +12,8 @@
     "flow-bin": "^0.137.0",
     "graphql": "^15.4.0",
     "react": "^16.13.1",
+    "react-autocomplete": "^1.8.1",
+    "react-datetime": "^3.0.4",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0"
