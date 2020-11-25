@@ -64,8 +64,7 @@ const PickupDetail: () => React$Node = () => {
               }}
               onChange={(e) => (selectedUser = e.target.value)}
               onSelect={(val) => {
-                selectedUser = val;
-                console.log(`adding ${selectedUser}`);
+                console.log(`adding ${val}`);
               }}
             />
           </div>

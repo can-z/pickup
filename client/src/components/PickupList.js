@@ -1,7 +1,6 @@
 // @flow
 import React from "react";
 import { useHistory } from "react-router-dom";
-import TimePicker from "react-time-picker";
 
 const PickupListPage: () => React$Node = () => {
   let history = useHistory();
