@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import {App} from './App';
 import * as serviceWorker from './serviceWorker';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
+const protocol = window.location.protocol;
+const slashes = protocol.concat("//");
+const host = slashes.concat(window.location.hostname);
+
 const client: ApolloClient = new ApolloClient({
-  uri: 'http://127.0.0.1:8080/graphql',
+  uri: host + ':8080/graphql',
   cache: new InMemoryCache()
 });
 
