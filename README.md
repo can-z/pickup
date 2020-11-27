@@ -2,6 +2,7 @@
 
 ## Local Dev
 
+1. Make sure you have `npm`, `golang` and `yarn` installed.
 1. `git clone` this repo.
 1. in the `server/` folder, run `make restart`
 1. in a new terminal window, in the `client/` folder, run `yarn`
