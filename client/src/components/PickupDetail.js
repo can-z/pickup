@@ -4,6 +4,7 @@ import "react-datetime/css/react-datetime.css";
 
 import Datetime from "react-datetime";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 const PickupDetail: () => React$Node = () => {
   const fromTimeInputProps = {
@@ -13,6 +14,11 @@ const PickupDetail: () => React$Node = () => {
   const toTimeInputProps = {
     placeholder: "Click to open time picker",
     id: "pickupToTime",
+  };
+
+  const history = useHistory();
+  const backToLanding = () => {
+    history.push("/");
   };
 
   return (
@@ -44,10 +50,10 @@ const PickupDetail: () => React$Node = () => {
         </div>
       </div>
       <div class="container-fluid m-1">
-        <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
+        <a role="button" href="/" className="btn btn-primary mx-1">
           Save draft
         </a>
-        <button type="button" className="btn btn-secondary mx-1">
+        <button type="button" onClick={backToLanding} className="btn btn-secondary mx-1">
           Back
         </button>
       </div>
