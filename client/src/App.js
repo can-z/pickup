@@ -14,7 +14,7 @@ const App: () => React$Node = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
+        <Route exact path="/">  
           <PickupListPage />
         </Route>
         <Route exact path="/getting-started">
