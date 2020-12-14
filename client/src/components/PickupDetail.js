@@ -50,9 +50,9 @@ const PickupDetail: () => React$Node = () => {
         </div>
       </div>
       <div class="container-fluid m-1">
-        <a role="button" onClick={backToLanding} className="btn btn-primary mx-1">
+        <button type="button" onClick={backToLanding} className="btn btn-primary mx-1">
           Save draft
-        </a>
+        </button>
         <button type="button" onClick={backToLanding} className="btn btn-secondary mx-1">
           Back
         </button>

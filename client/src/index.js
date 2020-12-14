@@ -1,9 +1,12 @@
+import "./index.css";
+
+import * as serviceWorker from "./serviceWorker";
+
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
+import { App } from "./App";
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import { App } from "./App";
-import * as serviceWorker from "./serviceWorker";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
 const protocol = window.location.protocol;
 const slashes = protocol.concat("//");

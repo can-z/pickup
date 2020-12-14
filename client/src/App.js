@@ -5,16 +5,17 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
+import ManageCustomer from "./components/ManageCustomer";
+import ModifyCustomer from "./components/ModifyCustomer";
 import PickupDetail from "./components/PickupDetail";
 import PickupListPage from "./components/PickupList";
 import React from "react";
-import logo from "./logo.svg";
 
 const App: () => React$Node = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">  
+        <Route exact path="/">          
           <PickupListPage />
         </Route>
         <Route exact path="/getting-started">
@@ -22,6 +23,12 @@ const App: () => React$Node = () => {
         </Route>
         <Route exact path="/add-pickup">
           <PickupDetail />
+        </Route>
+        <Route exact path="/manage-customer">
+          <ManageCustomer />
+        </Route>
+        <Route exact path="/modify-customer">
+          <ModifyCustomer />
         </Route>
       </Switch>
     </Router>
@@ -32,13 +39,13 @@ const StartingPoint: () => React$Node = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src="" className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://reactjs.org"  
           target="_blank"
           rel="noopener noreferrer"
         >
