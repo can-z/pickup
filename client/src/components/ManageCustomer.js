@@ -9,14 +9,14 @@ const ManageCustomer = () => {
     const backToLanding = () => {
     history.push("/");
     };
-    const modifyCustomer = () => {
-    history.push("/modify-customer")
+    const ModifyCustomer = () => {
+    history.push("/modify-a-customer")
     };
 
     return (
          <div>
             <div class="container-fluid m-1">
-                <button type="button" className="btn btn-secondary mx-1">New Customer</button>
+                <button type="button" className="btn btn-primary mx-1">New Customer</button>
             </div>
             
             <div class="container-fluid m-1">
@@ -32,7 +32,7 @@ const ManageCustomer = () => {
                         <tr>
                         <td>Roger</td>
                         <td>roger@gmail.com</td>
-                        <td><button type="button" className="btn btn-light mx-1" onClick={modifyCustomer}><AiOutlineEdit size={32}/></button></td>
+                        <td><button type="button" className="btn btn-light mx-1" onClick={ModifyCustomer}><AiOutlineEdit size={32}/></button></td>
                         </tr>
                         <tr>
                         <td>Wei</td>

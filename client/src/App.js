@@ -27,7 +27,7 @@ const App: () => React$Node = () => {
         <Route exact path="/manage-customer">
           <ManageCustomer />
         </Route>
-        <Route exact path="/modify-customer">
+        <Route exact path="/modify-a-customer">
           <ModifyCustomer />
         </Route>
       </Switch>

@@ -1,6 +1,5 @@
 import "./AutoSuggest.css";
 
-import { AiOutlineEdit } from 'react-icons/ai';
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -8,9 +7,6 @@ const ModifyCustomer = () => {
     const history = useHistory();
     const manageCustomer = () => {
     history.push("/manage-customer");
-    };
-    const modifyCustomer = () => {
-    history.push("/modify-customer");
     };
 
     return (
@@ -20,8 +16,8 @@ const ModifyCustomer = () => {
             <table className="table table-hover">
                 <thead className="thead-dark">
                     <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>   
+                    <th scope="col-sm">Name</th>
+                    <th scope="col-sm">Email</th>   
                     </tr>
                 </thead>
                 <tbody>
