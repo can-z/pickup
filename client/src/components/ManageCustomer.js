@@ -1,5 +1,3 @@
-import "./AutoSuggest.css";
-
 import { AiOutlineEdit } from 'react-icons/ai';
 import React from "react";
 import { useHistory } from "react-router-dom";
