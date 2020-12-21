@@ -9,7 +9,13 @@ const PickupListPage: () => React$Node = () => {
 
   const goToDetailsPage: (batchId: string) => void = (batchId) => {
     history.push("/add-pickup");
+    
   };
+
+  const goToManageCustomersPage = () => {
+    history.push("/manage-customer");
+  };
+  
   let [unselectedCustomers, setUnselectedCustomers] = useState([
     "Roger",
     "Rogers",
@@ -88,7 +94,7 @@ const PickupListPage: () => React$Node = () => {
         <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
           New pickup option
         </a>
-        <button type="button" className="btn btn-secondary mx-1">
+        <button type="button" onClick={goToManageCustomersPage} className="btn btn-secondary mx-1">
           Manage customers
         </button>
       </div>
