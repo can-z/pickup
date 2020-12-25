@@ -23,13 +23,44 @@ var smsType = graphql.NewObject(
 	},
 )
 
+var customerType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Customer",
+		Fields: graphql.Fields{
+			"customerId": &graphql.Field{
+				Type: graphql.String,
+			},
+			"phoneNumber": &graphql.Field{
+				Type: graphql.String,
+			},
+			"friendlyName": &graphql.Field{
+				Type: graphql.String,
+			},
+		},
+	},
+)
+
 // Schema golint
 func Schema() graphql.Schema {
+
+	respMap := []domaintype.Customer{{
+		CustomerID:   "12",
+		PhoneNumber:  "6472617767",
+		FriendlyName: "Can",
+	}, {
+		CustomerID:   "13",
+		PhoneNumber:  "6472617767",
+		FriendlyName: "Roger",
+	}, {
+		CustomerID:   "14",
+		PhoneNumber:  "6472617767",
+		FriendlyName: "Weiwei",
+	}}
 	fields := graphql.Fields{
-		"hello": &graphql.Field{
-			Type: graphql.String,
+		"customers": &graphql.Field{
+			Type: graphql.NewList(customerType),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				return "world", nil
+				return respMap, nil
 			},
 		},
 	}

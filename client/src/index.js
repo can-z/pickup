@@ -20,8 +20,12 @@ const client: ApolloClient = new ApolloClient({
 client
   .query({
     query: gql`
-      {
-        hello
+      query {
+        customers {
+          customerId
+          friendlyName
+          phoneNumber
+        }
       }
     `,
   })
