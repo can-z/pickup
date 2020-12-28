@@ -7,16 +7,24 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/can-z/pickup/server/domaintype"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPingRoute(t *testing.T) {
-	router := setupRouter()
+	appConfig := domaintype.AppConfig{
+		DatabaseFile: ":memory:",
+	}
+	router := setupRouter(appConfig)
 
 	w := httptest.NewRecorder()
 	payload, _ := json.Marshal(gin.H{
-		"query": "{hello}",
+		"query": `{
+			customers{
+			  customerId
+			}
+		  }`,
 	})
 
 	req, _ := http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
@@ -25,7 +33,7 @@ func TestPingRoute(t *testing.T) {
 	assert.Equal(t, 200, w.Code)
 	expectedResponse, _ := json.Marshal(gin.H{
 		"data": gin.H{
-			"hello": "world",
+			"customers": []domaintype.Customer{},
 		},
 	})
 	assert.Equal(t, string(expectedResponse), w.Body.String())

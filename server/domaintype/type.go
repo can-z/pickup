@@ -17,3 +17,8 @@ type Sms struct {
 func (Customer) TableName() string {
 	return "customer"
 }
+
+// Config stores settings to start a server.
+type AppConfig struct {
+	DatabaseFile string
+}

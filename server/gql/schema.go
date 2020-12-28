@@ -3,9 +3,11 @@ package gql
 import (
 	"log"
 
-	"github.com/can-z/pickup/server/backend"
+	"github.com/can-z/pickup/server/customer"
 	"github.com/can-z/pickup/server/domaintype"
-	"github.com/can-z/pickup/server/service"
+	"github.com/can-z/pickup/server/sms"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 
 	"github.com/graphql-go/graphql"
 )
@@ -42,15 +44,19 @@ var customerType = graphql.NewObject(
 )
 
 // Schema golint
-func Schema() graphql.Schema {
+func Schema(appConfig domaintype.AppConfig) graphql.Schema {
+	databaseFileName := appConfig.DatabaseFile
+	db, err := gorm.Open(sqlite.Open(databaseFileName), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+	customerSvc := customer.NewCustomerSvc(db)
 
-	backend.PopulateCustomerTable()
 	fields := graphql.Fields{
 		"customers": &graphql.Field{
 			Type: graphql.NewList(customerType),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				backend.GetAllCustomers()
-				return backend.GetAllCustomers(), nil
+				return customerSvc.GetAllCustomers(), nil
 			},
 		},
 	}
@@ -71,9 +77,7 @@ func Schema() graphql.Schema {
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-					smsSvc := service.NewSmsService(
-						backend.NewTwillioSmsBackend("foo", "bar"),
-					)
+					smsSvc := sms.NewSmsSvc()
 					cus := domaintype.Customer{CustomerID: "abc-123", PhoneNumber: "6472222222", FriendlyName: "Sam the Man"}
 					smsSvc.SendSms(domaintype.Sms{Customer: cus, Body: params.Args["body"].(string)})
 					return true, nil
