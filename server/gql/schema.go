@@ -44,24 +44,13 @@ var customerType = graphql.NewObject(
 // Schema golint
 func Schema() graphql.Schema {
 
-	respMap := []domaintype.Customer{{
-		CustomerID:   "12",
-		PhoneNumber:  "6472617767",
-		FriendlyName: "Can",
-	}, {
-		CustomerID:   "13",
-		PhoneNumber:  "6472617767",
-		FriendlyName: "Roger",
-	}, {
-		CustomerID:   "14",
-		PhoneNumber:  "6472617767",
-		FriendlyName: "Weiwei",
-	}}
+	backend.PopulateCustomerTable()
 	fields := graphql.Fields{
 		"customers": &graphql.Field{
 			Type: graphql.NewList(customerType),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				return respMap, nil
+				backend.GetAllCustomers()
+				return backend.GetAllCustomers(), nil
 			},
 		},
 	}

@@ -10,4 +10,6 @@ require (
 	github.com/graphql-go/handler v0.2.3
 	github.com/mattn/go-sqlite3 v1.14.6
 	github.com/stretchr/testify v1.6.1
+	gorm.io/driver/sqlite v1.1.4
+	gorm.io/gorm v1.20.9
 )

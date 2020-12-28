@@ -1,1 +1,1 @@
-create table customer (customer_id TEXT, friendly_name TEXT, phone_number TEXT)
+create table customer (customer_id TEXT, friendly_name TEXT, phone_number TEXT, PRIMARY KEY (customer_id))
