@@ -45,11 +45,11 @@ func populateCustomerTable(appConfig domaintype.AppConfig) {
 	if result.Error == nil {
 		return
 	}
-	db.Create(&domaintype.Customer{CustomerID: "1", FriendlyName: "Roger", PhoneNumber: "6471111111"})
-	db.Create(&domaintype.Customer{CustomerID: "2", FriendlyName: "Wei", PhoneNumber: "6472222222"})
-	db.Create(&domaintype.Customer{CustomerID: "3", FriendlyName: "Can", PhoneNumber: "6473333333"})
-	db.Create(&domaintype.Customer{CustomerID: "4", FriendlyName: "Stella", PhoneNumber: "6474444444"})
-	db.Create(&domaintype.Customer{CustomerID: "5", FriendlyName: "Hui", PhoneNumber: "6475555555"})
+	db.Create(&domaintype.Customer{ID: "1", FriendlyName: "Roger", PhoneNumber: "6471111111"})
+	db.Create(&domaintype.Customer{ID: "2", FriendlyName: "Wei", PhoneNumber: "6472222222"})
+	db.Create(&domaintype.Customer{ID: "3", FriendlyName: "Can", PhoneNumber: "6473333333"})
+	db.Create(&domaintype.Customer{ID: "4", FriendlyName: "Stella", PhoneNumber: "6474444444"})
+	db.Create(&domaintype.Customer{ID: "5", FriendlyName: "Hui", PhoneNumber: "6475555555"})
 }
 
 func main() {

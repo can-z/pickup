@@ -30,7 +30,7 @@ var customerType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Customer",
 		Fields: graphql.Fields{
-			"customerId": &graphql.Field{
+			"id": &graphql.Field{
 				Type: graphql.String,
 			},
 			"phoneNumber": &graphql.Field{
@@ -78,7 +78,7 @@ func Schema(appConfig domaintype.AppConfig) graphql.Schema {
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					smsSvc := sms.NewSmsSvc()
-					cus := domaintype.Customer{CustomerID: "abc-123", PhoneNumber: "6472222222", FriendlyName: "Sam the Man"}
+					cus := domaintype.Customer{ID: "abc-123", PhoneNumber: "6472222222", FriendlyName: "Sam the Man"}
 					smsSvc.SendSms(domaintype.Sms{Customer: cus, Body: params.Args["body"].(string)})
 					return true, nil
 				},
