@@ -6,6 +6,7 @@ import (
 	"github.com/can-z/pickup/server/backend"
 	"github.com/can-z/pickup/server/domaintype"
 	"github.com/can-z/pickup/server/service"
+
 	"github.com/graphql-go/graphql"
 )
 
@@ -87,6 +88,14 @@ func Schema() graphql.Schema {
 					cus := domaintype.Customer{CustomerID: "abc-123", PhoneNumber: "6472222222", FriendlyName: "Sam the Man"}
 					smsSvc.SendSms(domaintype.Sms{Customer: cus, Body: params.Args["body"].(string)})
 					return true, nil
+				},
+			},
+			"createUser": &graphql.Field{
+				Type:        customerType,
+				Description: "Create a new user",
+				Args:        graphql.FieldConfigArgument{},
+				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+					return &domaintype.Customer{}, nil
 				},
 			},
 		}})

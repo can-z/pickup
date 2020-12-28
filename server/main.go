@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/can-z/pickup/server/gql"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/graphql-go/handler"

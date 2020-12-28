@@ -1,0 +1,1 @@
+create table customer (customer_id TEXT, friendly_name TEXT, phone_number TEXT)
