@@ -23,7 +23,7 @@ func setupRouter(appConfig domaintype.AppConfig) *gin.Engine {
 	schema := gql.Schema(appConfig)
 
 	h := handler.New(&handler.Config{
-		Schema:   &schema,
+		Schema:   schema,
 		Pretty:   false,
 		GraphiQL: true,
 	})

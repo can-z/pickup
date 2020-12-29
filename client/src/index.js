@@ -22,7 +22,7 @@ client
     query: gql`
       query {
         customers {
-          customerId
+          id
           friendlyName
           phoneNumber
         }

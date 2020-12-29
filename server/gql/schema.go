@@ -45,7 +45,7 @@ var customerType = graphql.NewObject(
 )
 
 // Schema golint
-func Schema(appConfig domaintype.AppConfig) graphql.Schema {
+func Schema(appConfig domaintype.AppConfig) *graphql.Schema {
 	databaseFileName := appConfig.DatabaseFile
 	fmt.Printf("schema: databaseFileName %s\n", databaseFileName)
 	db, err := gorm.Open(sqlite.Open(databaseFileName), &gorm.Config{})
@@ -107,5 +107,5 @@ func Schema(appConfig domaintype.AppConfig) graphql.Schema {
 		log.Fatalf("failed to create new schema, error: %v", err)
 	}
 
-	return schema
+	return &schema
 }

@@ -16,10 +16,10 @@ import (
 
 func TestMain(t *testing.T) {
 	appConfig := domaintype.AppConfig{
-		DatabaseFile: "abc",
+		DatabaseFile: "file:test.db?cache=shared&mode=memory",
 	}
-	dbmigration.ApplyMigration(appConfig)
 	router := setupRouter(appConfig)
+	dbmigration.ApplyMigration(appConfig)
 	t.Run("customers empty", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(gin.H{
