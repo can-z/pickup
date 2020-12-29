@@ -1,4 +1,4 @@
-buildall: migrate server
+buildall:
 	go clean
 	rm ./migrate
 	go build github.com/can-z/pickup/server
