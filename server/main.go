@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/can-z/pickup/server/domaintype"
 	"github.com/can-z/pickup/server/gql"
 	"github.com/spf13/viper"
@@ -45,6 +47,7 @@ func populateCustomerTable(appConfig domaintype.AppConfig) {
 	if result.Error == nil {
 		return
 	}
+	fmt.Println("Populating test server data")
 	db.Create(&domaintype.Customer{ID: "1", FriendlyName: "Roger", PhoneNumber: "6471111111"})
 	db.Create(&domaintype.Customer{ID: "2", FriendlyName: "Wei", PhoneNumber: "6472222222"})
 	db.Create(&domaintype.Customer{ID: "3", FriendlyName: "Can", PhoneNumber: "6473333333"})

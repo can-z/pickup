@@ -4,5 +4,8 @@ restart:
 	go build github.com/can-z/pickup/server
 	go build github.com/can-z/pickup/server/cmd/migrate
 	./server
-
-PHONY: restart
+test:
+	go clean
+	go build
+	go test
+PHONY: restart test

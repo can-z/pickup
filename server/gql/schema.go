@@ -1,6 +1,7 @@
 package gql
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/can-z/pickup/server/customer"
@@ -46,6 +47,7 @@ var customerType = graphql.NewObject(
 // Schema golint
 func Schema(appConfig domaintype.AppConfig) graphql.Schema {
 	databaseFileName := appConfig.DatabaseFile
+	fmt.Printf("schema: databaseFileName %s\n", databaseFileName)
 	db, err := gorm.Open(sqlite.Open(databaseFileName), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -86,9 +88,16 @@ func Schema(appConfig domaintype.AppConfig) graphql.Schema {
 			"createUser": &graphql.Field{
 				Type:        customerType,
 				Description: "Create a new user",
-				Args:        graphql.FieldConfigArgument{},
+				Args: graphql.FieldConfigArgument{
+					"friendlyName": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.String),
+					},
+					"phoneNumber": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.String),
+					},
+				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-					return &domaintype.Customer{}, nil
+					return customerSvc.CreateCustomer(&domaintype.Customer{FriendlyName: params.Args["friendlyName"].(string), PhoneNumber: params.Args["phoneNumber"].(string)}), nil
 				},
 			},
 		}})

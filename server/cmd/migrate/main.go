@@ -1,30 +1,13 @@
 package main
 
 import (
-	"database/sql"
-	"log"
-
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/sqlite3"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/can-z/pickup/server/dbmigration"
+	"github.com/can-z/pickup/server/domaintype"
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "local.db")
-	if err != nil {
-		log.Fatal(err)
+	appConfig := domaintype.AppConfig{
+		DatabaseFile: "local.db",
 	}
-	defer db.Close()
-	driver, err := sqlite3.WithInstance(db, &sqlite3.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://db_migrations",
-		"sqlite", driver)
-	if err != nil {
-		log.Fatal(err)
-	}
-	m.Up()
+	dbmigration.ApplyMigration(appConfig)
 }
