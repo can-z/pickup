@@ -3,9 +3,9 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 
+import ManageCustomer, { CustomerData } from "./components/ManageCustomer";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
-import ManageCustomer from "./components/ManageCustomer";
 import ModifyCustomer from "./components/ModifyCustomer";
 import PickupDetail from "./components/PickupDetail";
 import PickupListPage from "./components/PickupList";

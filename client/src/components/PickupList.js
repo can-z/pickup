@@ -2,17 +2,18 @@
 import React, { useState } from "react";
 
 import Autosuggest from "react-autosuggest";
+import type {Node} from 'react';
 import { useHistory } from "react-router-dom";
 
-const PickupListPage: () => React$Node = () => {
+const PickupListPage: () => Node = () => {
   let history = useHistory();
 
-  const goToDetailsPage: (batchId: string) => void = (batchId) => {
+  const goToDetailsPage: (batchId: string) => void = (batchId: string) => {
     history.push("/add-pickup");
     
   };
 
-  const goToManageCustomersPage = () => {
+  const goToManageCustomersPage: () => void = () => {
     history.push("/manage-customer");
   };
   

@@ -1,6 +1,18 @@
+import { gql, useQuery } from '@apollo/client';
+
 import { AiOutlineEdit } from 'react-icons/ai';
 import React from "react";
 import { useHistory } from "react-router-dom";
+
+const MANAGE_CUSTOMERS = gql`
+query {
+  customers {
+    id
+    friendlyName
+    phoneNumber
+  }
+}
+`;
 
 const ManageCustomer = () => {
     const history = useHistory();
@@ -11,47 +23,50 @@ const ManageCustomer = () => {
     history.push("/modify-a-customer")
     };
 
-    return (
+    const CustomerData = () => {   
+        const {loading, error, data } = useQuery(MANAGE_CUSTOMERS);
+    
+        if(loading) return <p>Loading...</p>;
+        if(error) return <p>Error :(</p>
+    
+        return data.customers.map( ({id, friendlyName, phoneNumber}) => (
+            <tr key={id}>
+                <td>{id}</td>
+                <td>{friendlyName}</td>
+                <td>{phoneNumber}</td>
+                <td>
+                    <button type="button" className="btn btn-light mx-1" onClick={ModifyCustomer} ><AiOutlineEdit size={32}/>
+                    </button>
+                </td>
+            </tr>
+        ));
+    };
+
+    return(
          <div>
+            
             <div class="container-fluid m-1">
                 <button type="button" className="btn btn-primary mx-1">New Customer</button>
+                <button type="button" onClick={backToLanding} className="btn btn-secondary mx-1">
+                Back
+                </button>
             </div>
             
             <div class="container-fluid m-1">
                 <table className="table table-hover">
                     <thead className="thead-dark">
                         <tr>
+                        <th scope="col">id</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Email</th>
+                        <th scope="col">Number</th>
                         <th scope="col">Modify</th>  
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <td>Roger</td>
-                        <td>roger@gmail.com</td>
-                        <td><button type="button" className="btn btn-light mx-1" onClick={ModifyCustomer}><AiOutlineEdit size={32}/></button></td>
-                        </tr>
-                        <tr>
-                        <td>Wei</td>
-                        <td>wei@hotmail.com</td>
-                        <td><button type="button" className="btn btn-light mx-1"><AiOutlineEdit size={32}/></button></td>
-                        </tr>
-                        <tr>
-                        <td>Ray</td>
-                        <td>ray@qq.com</td>
-                        <td><button type="button" className="btn btn-light mx-1"><AiOutlineEdit size={32}/></button></td>
-                        </tr>
+                        {CustomerData()}
                     </tbody>
                 </table> 
             </div>
-
-            <div class="container-fluid m-1">
-                <button type="button" onClick={backToLanding} className="btn btn-secondary mx-1">
-                Back
-                </button>
-            </div>
-
             
         </div>
     );

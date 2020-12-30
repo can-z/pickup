@@ -15,13 +15,13 @@ const ModifyCustomer = () => {
                 <thead className="thead-dark">
                     <tr>
                     <th scope="col-sm">Name</th>
-                    <th scope="col-sm">Email</th>   
+                    <th scope="col-sm">phone Number</th>   
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                     <td><input type="text" placeholder="Roger" /></td>
-                    <td><input type="text" placeholder="roger@gmail.com" /></td>
+                    <td><input type="text" placeholder="12345678" /></td>
                     </tr>
                 </tbody>
             </table> 
