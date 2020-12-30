@@ -3,38 +3,12 @@ package main
 import (
 	"fmt"
 
+	"github.com/can-z/pickup/server/app"
 	"github.com/can-z/pickup/server/domaintype"
-	"github.com/can-z/pickup/server/gql"
 	"github.com/spf13/viper"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"github.com/graphql-go/handler"
 )
-
-func setupRouter(appConfig domaintype.AppConfig) *gin.Engine {
-
-	r := gin.Default()
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	r.Use(cors.New(config))
-	schema := gql.Schema(appConfig)
-
-	h := handler.New(&handler.Config{
-		Schema:   schema,
-		Pretty:   false,
-		GraphiQL: true,
-	})
-	r.POST("/graphql", func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
-	})
-	r.GET("/graphql", func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
-	})
-	return r
-}
 
 func populateCustomerTable(appConfig domaintype.AppConfig) {
 	databaseFileName := appConfig.DatabaseFile
@@ -59,9 +33,10 @@ func main() {
 	runtimeViper := viper.New()
 	runtimeViper.SetDefault("databaseFile", "local.db")
 	appConfig := domaintype.AppConfig{
-		DatabaseFile: runtimeViper.GetString("databaseFile"),
+		DatabaseFile:        runtimeViper.GetString("databaseFile"),
+		MigrationFolderPath: ".",
 	}
 	populateCustomerTable(appConfig)
-	r := setupRouter(appConfig)
+	r, _ := app.SetupRouter(appConfig)
 	_ = r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

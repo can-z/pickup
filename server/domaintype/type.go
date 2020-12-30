@@ -57,5 +57,7 @@ func (Customer) TableName() string {
 
 // AppConfig stores settings to start a server.
 type AppConfig struct {
-	DatabaseFile string
+	DatabaseFile        string
+	MigrationFolderPath string
+	IsTestingMode       bool
 }

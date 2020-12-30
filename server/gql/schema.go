@@ -1,7 +1,6 @@
 package gql
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/can-z/pickup/server/customer"
@@ -45,10 +44,12 @@ var customerType = graphql.NewObject(
 )
 
 // Schema golint
-func Schema(appConfig domaintype.AppConfig) *graphql.Schema {
+func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 	databaseFileName := appConfig.DatabaseFile
-	fmt.Printf("schema: databaseFileName %s\n", databaseFileName)
 	db, err := gorm.Open(sqlite.Open(databaseFileName), &gorm.Config{})
+	if appConfig.IsTestingMode {
+		db = db.Begin()
+	}
 	if err != nil {
 		panic("failed to connect database")
 	}
@@ -107,5 +108,5 @@ func Schema(appConfig domaintype.AppConfig) *graphql.Schema {
 		log.Fatalf("failed to create new schema, error: %v", err)
 	}
 
-	return &schema
+	return &schema, db
 }

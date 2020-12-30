@@ -7,7 +7,8 @@ import (
 
 func main() {
 	appConfig := domaintype.AppConfig{
-		DatabaseFile: "local.db",
+		DatabaseFile:        "local.db",
+		MigrationFolderPath: ".",
 	}
 	dbmigration.ApplyMigration(appConfig)
 }

@@ -22,8 +22,9 @@ func ApplyMigration(appConfig domaintype.AppConfig) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Printf("migration folder path: %s\n", appConfig.MigrationFolderPath)
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://dbmigration/steps",
+		fmt.Sprintf("file://%s/dbmigration/steps", appConfig.MigrationFolderPath),
 		"sqlite", driver)
 	if err != nil {
 		log.Fatal(err)
