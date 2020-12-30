@@ -11,7 +11,9 @@ import (
 	"github.com/can-z/pickup/server/dbmigration"
 	"github.com/can-z/pickup/server/domaintype"
 	"github.com/gin-gonic/gin"
+	"github.com/graphql-go/graphql"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMain(t *testing.T) {
@@ -47,7 +49,7 @@ func TestMain(t *testing.T) {
 		db.RollbackTo("test")
 	})
 
-	t.Run("create customer", func(t *testing.T) {
+	t.Run("create customers", func(t *testing.T) {
 		var cus domaintype.Customer
 		result := db.First(&cus)
 		assert.Equal(t, int64(0), result.RowsAffected)
@@ -62,34 +64,74 @@ func TestMain(t *testing.T) {
 		req, _ := http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
 		router.ServeHTTP(w, req)
 
-		assert.Equal(t, 200, w.Code)
+		require.Equal(t, 200, w.Code)
 		result = db.First(&cus)
-		assert.Equal(t, int64(1), result.RowsAffected)
+		require.Equal(t, int64(1), result.RowsAffected)
 		assert.Equal(t, "a", cus.FriendlyName)
 		assert.Equal(t, "123456789", cus.PhoneNumber)
+
+		// create a second user with the same phone number
+		w = httptest.NewRecorder()
+		payload, _ = json.Marshal(gin.H{
+			"query": `mutation createUser{createUser(friendlyName:"a", phoneNumber:"123456789"){
+				id
+			  }}`,
+		})
+
+		req, _ = http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
+		router.ServeHTTP(w, req)
+
+		require.Equal(t, 200, w.Code)
+		var res graphql.Result
+		json.Unmarshal(w.Body.Bytes(), &res)
+		require.Equal(t, 200, w.Code)
+		require.Equal(t, "phoneNumber already exists", res.Errors[0].Message)
 		db.RollbackTo("test")
 	})
 
-	t.Run("create another customer", func(t *testing.T) {
+	t.Run("create customer with empty name", func(t *testing.T) {
 		var cus domaintype.Customer
 		result := db.First(&cus)
 		assert.Equal(t, int64(0), result.RowsAffected)
 
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(gin.H{
-			"query": `mutation createUser{createUser(friendlyName:"a", phoneNumber:"123456789"){
+			"query": `mutation createUser{createUser(friendlyName:"", phoneNumber:"123456789"){
 				id
 			  }}`,
 		})
 
 		req, _ := http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
 		router.ServeHTTP(w, req)
-
-		assert.Equal(t, 200, w.Code)
+		var res graphql.Result
+		json.Unmarshal(w.Body.Bytes(), &res)
+		require.Equal(t, 200, w.Code)
+		require.Equal(t, "friendlyName cannot be empty", res.Errors[0].Message)
 		result = db.First(&cus)
-		assert.Equal(t, int64(1), result.RowsAffected)
-		assert.Equal(t, "a", cus.FriendlyName)
-		assert.Equal(t, "123456789", cus.PhoneNumber)
+		require.Equal(t, int64(0), result.RowsAffected)
+		db.RollbackTo("test")
+	})
+
+	t.Run("create customer with empty phoneNumber", func(t *testing.T) {
+		var cus domaintype.Customer
+		result := db.First(&cus)
+		assert.Equal(t, int64(0), result.RowsAffected)
+
+		w := httptest.NewRecorder()
+		payload, _ := json.Marshal(gin.H{
+			"query": `mutation createUser{createUser(friendlyName:"Can", phoneNumber:""){
+				id
+			  }}`,
+		})
+
+		req, _ := http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
+		router.ServeHTTP(w, req)
+		var res graphql.Result
+		json.Unmarshal(w.Body.Bytes(), &res)
+		require.Equal(t, 200, w.Code)
+		require.Equal(t, "phoneNumber cannot be empty", res.Errors[0].Message)
+		result = db.First(&cus)
+		require.Equal(t, int64(0), result.RowsAffected)
 		db.RollbackTo("test")
 	})
 
