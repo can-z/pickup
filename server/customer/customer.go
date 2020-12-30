@@ -28,6 +28,18 @@ func (svc Svc) GetAllCustomers() []*domaintype.Customer {
 	return allCustomers
 }
 
+// GetCustomer gets a customer by ID
+func (svc Svc) GetCustomer(id string) (*domaintype.Customer, error) {
+
+	var cus domaintype.Customer
+
+	result := svc.db.Where(&domaintype.Customer{ID: id}).First(&cus)
+	if result.RowsAffected == 0 {
+		return nil, errors.New("customer not found")
+	}
+	return &cus, nil
+}
+
 // CreateCustomer creates a new customer
 func (svc Svc) CreateCustomer(cus *domaintype.Customer) (*domaintype.Customer, error) {
 	if len(cus.FriendlyName) == 0 {

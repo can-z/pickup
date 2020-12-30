@@ -10,6 +10,7 @@ require (
 	github.com/graphql-go/graphql v0.7.9
 	github.com/graphql-go/handler v0.2.3
 	github.com/mattn/go-sqlite3 v1.14.6 // indirect
+	github.com/mitchellh/mapstructure v1.4.0
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.6.1
 	gorm.io/driver/sqlite v1.1.4

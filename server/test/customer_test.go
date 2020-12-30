@@ -3,6 +3,7 @@ package test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,6 +13,7 @@ import (
 	"github.com/can-z/pickup/server/domaintype"
 	"github.com/gin-gonic/gin"
 	"github.com/graphql-go/graphql"
+	"github.com/mitchellh/mapstructure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -86,9 +88,45 @@ func TestMain(t *testing.T) {
 		json.Unmarshal(w.Body.Bytes(), &res)
 		require.Equal(t, 200, w.Code)
 		require.Equal(t, "phoneNumber already exists", res.Errors[0].Message)
+
+		// Test get by ID
+		w = httptest.NewRecorder()
+		payload, _ = json.Marshal(gin.H{
+			"query": fmt.Sprintf(`{
+			customer(id: "%s"){
+			  id
+			}
+		  }`, cus.ID),
+		})
+
+		req, _ = http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
+		router.ServeHTTP(w, req)
+		assert.Equal(t, 200, w.Code)
+		json.Unmarshal(w.Body.Bytes(), &res)
+		var cusByID domaintype.Customer
+		mapstructure.Decode(res.Data.(map[string]interface{})["customer"], &cusByID)
+		assert.Equal(t, cus.ID, cusByID.ID)
 		db.RollbackTo("test")
 	})
 
+	t.Run("get nonexistent customer", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		payload, _ := json.Marshal(gin.H{
+			"query": `{
+			customer(id: "idontexist"){
+			  id
+			}
+		  }`,
+		})
+
+		req, _ := http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
+		router.ServeHTTP(w, req)
+		assert.Equal(t, 200, w.Code)
+		var res graphql.Result
+		json.Unmarshal(w.Body.Bytes(), &res)
+		require.Equal(t, 1, len(res.Errors))
+		assert.Equal(t, "customer not found", res.Errors[0].Message)
+	})
 	t.Run("create customer with empty name", func(t *testing.T) {
 		var cus domaintype.Customer
 		result := db.First(&cus)

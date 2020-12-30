@@ -62,6 +62,17 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 				return customerSvc.GetAllCustomers(), nil
 			},
 		},
+		"customer": &graphql.Field{
+			Type: customerType,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				return customerSvc.GetCustomer(params.Args["id"].(string))
+			},
+		},
 	}
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
 
