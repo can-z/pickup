@@ -26,8 +26,8 @@ const ManageCustomer = () => {
     const CustomerData = () => {   
         const {loading, error, data } = useQuery(MANAGE_CUSTOMERS);
     
-        if(loading) return <p>Loading...</p>;
-        if(error) return <p>Error :(</p>
+        if(loading) return <tr><td>Loading...</td></tr>;
+        if(error) return <tr><td>Loading...</td></tr>;
     
         return data.customers.map( ({id, friendlyName, phoneNumber}) => (
             <tr key={id}>
@@ -45,14 +45,14 @@ const ManageCustomer = () => {
     return(
          <div>
             
-            <div class="container-fluid m-1">
+            <div className="container-fluid m-1">
                 <button type="button" className="btn btn-primary mx-1">New Customer</button>
                 <button type="button" onClick={backToLanding} className="btn btn-secondary mx-1">
                 Back
                 </button>
             </div>
             
-            <div class="container-fluid m-1">
+            <div className="container-fluid m-1">
                 <table className="table table-hover">
                     <thead className="thead-dark">
                         <tr>

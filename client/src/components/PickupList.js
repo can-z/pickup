@@ -91,7 +91,7 @@ const PickupListPage: () => Node = () => {
   };
   return (
     <div>
-      <div class="container-fluid m-1">
+      <div className="container-fluid m-1">
         <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
           New pickup option
         </a>
@@ -123,7 +123,7 @@ const PickupListPage: () => Node = () => {
         <label>Selected customers</label>
         <SelectedCustomerList selectedCustomers={selectedCustomers} />
       </div>
-      <div class="container-fluid m-1">
+      <div className="container-fluid m-1">
         <table className="table table-hover">
           <thead className="thead-dark">
             <tr>
@@ -151,7 +151,7 @@ const PickupListPage: () => Node = () => {
           </tbody>
         </table>
       </div>
-      <div class="container-fluid m-1">
+      <div className="container-fluid m-1">
         <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
           Finalize and notify
         </a>
