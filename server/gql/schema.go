@@ -69,6 +69,44 @@ var intTimeType = graphql.NewScalar(graphql.ScalarConfig{
 	},
 })
 
+var appointmentActionEnumType = graphql.NewScalar(graphql.ScalarConfig{
+	Name:        "appointmentActionEnumType",
+	Description: "The `appointmentActionEnumType` scalar type represents the enum type for appointment actions.",
+	// Serialize serializes `AppointmentActionEnum` to int.
+	Serialize: func(value interface{}) interface{} {
+		switch value := value.(type) {
+		case domaintype.AppointmentActionEnum:
+			return int(value)
+		case *domaintype.AppointmentActionEnum:
+			v := *value
+			return int(v)
+		default:
+			return nil
+		}
+	},
+	// ParseValue parses GraphQL variables from `int` to `AppointmentActionEnum`.
+	ParseValue: func(value interface{}) interface{} {
+		switch value := value.(type) {
+		case int:
+			return domaintype.AppointmentActionEnum(value)
+		case *int:
+			return domaintype.AppointmentActionEnum(*value)
+		default:
+			return nil
+		}
+	},
+	// ParseLiteral parses GraphQL AST value to `AppointmentActionEnum`.
+	ParseLiteral: func(valueAST ast.Value) interface{} {
+		switch valueAST := valueAST.(type) {
+		case *ast.IntValue:
+			intValue, _ := strconv.Atoi(valueAST.Value)
+			return domaintype.AppointmentActionEnum(intValue)
+		default:
+			return nil
+		}
+	},
+})
+
 var customerType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Customer",
@@ -118,6 +156,29 @@ var appointmentType = graphql.NewObject(
 			},
 			"location": &graphql.Field{
 				Type: locationType,
+			},
+		},
+	},
+)
+
+var appointmentActionType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "AppointmentAction",
+		Fields: graphql.Fields{
+			"id": &graphql.Field{
+				Type: graphql.ID,
+			},
+			"customer": &graphql.Field{
+				Type: customerType,
+			},
+			"appointment": &graphql.Field{
+				Type: appointmentType,
+			},
+			"type": &graphql.Field{
+				Type: appointmentActionEnumType,
+			},
+			"createdAt": &graphql.Field{
+				Type: intTimeType,
 			},
 		},
 	},
@@ -213,13 +274,16 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 				},
 			},
 			"createAppointmentAction": &graphql.Field{
-				Type:        appointmentType,
+				Type:        appointmentActionType,
 				Description: "Create a new appointment action",
 				Args: graphql.FieldConfigArgument{
-					"customerID": &graphql.ArgumentConfig{
+					"type": &graphql.ArgumentConfig{
+						Type: appointmentActionEnumType,
+					},
+					"appointmentID": &graphql.ArgumentConfig{
 						Type: graphql.NewNonNull(graphql.String),
 					},
-					"action": &graphql.ArgumentConfig{
+					"customerID": &graphql.ArgumentConfig{
 						Type: graphql.NewNonNull(graphql.String),
 					},
 				},
@@ -228,7 +292,7 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 					if err != nil {
 						return nil, errors.New("customerID does not exist")
 					}
-					return &domaintype.AppointmentAction{Customer: *cus}, nil
+					return &domaintype.AppointmentAction{Customer: *cus, Type: domaintype.Draft, CreatedAt: domaintype.IntTime(time.Now()), Appointment: domaintype.Appointment{ID: "123"}}, nil
 				},
 			},
 		}})

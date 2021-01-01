@@ -23,7 +23,7 @@ func TestAppointment(t *testing.T) {
 		IsTestingMode:       true,
 	}
 	router, db := app.SetupRouter(appConfig)
-	db.SavePoint("appointmentTest")
+	db.SavePoint("test")
 	dbmigration.ApplyMigration(appConfig)
 
 	t.Run("create an appointment", func(t *testing.T) {
@@ -45,7 +45,7 @@ func TestAppointment(t *testing.T) {
 		assert.Equal(t, 200, w.Code)
 		result = db.First(&aptmt)
 		require.Equal(t, int64(1), result.RowsAffected)
-		db.RollbackTo("appointmentTest")
+		db.RollbackTo("test")
 	})
 
 	t.Run("create an appointment with invalid arguments", func(t *testing.T) {
@@ -71,6 +71,6 @@ func TestAppointment(t *testing.T) {
 		require.Equal(t, "address cannot be empty", res.Errors[0].Message)
 		result = db.First(&aptmt)
 		require.Equal(t, int64(0), result.RowsAffected)
-		db.RollbackTo("appointmentTest")
+		db.RollbackTo("test")
 	})
 }

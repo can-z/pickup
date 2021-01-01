@@ -29,15 +29,28 @@ type Appointment struct {
 
 // AppointmentAction stores actions that have been performed for an appointment.
 type AppointmentAction struct {
-	ID          string
-	Appointment Appointment
-	Customer    Customer
-	Action      AppointmentActionType
-	CreatedAt   time.Time
+	ID            string
+	AppointmentID string
+	Appointment   Appointment
+	CustomerID    string
+	Customer      Customer
+	Type          AppointmentActionEnum
+	CreatedAt     IntTime
 }
 
-// AppointmentActionType represents action types
-type AppointmentActionType int
+// AppointmentActionEnum represents action types
+type AppointmentActionEnum int
+
+// Scan custom scanner
+func (aat AppointmentActionEnum) Scan(value interface{}) error {
+	aat = AppointmentActionEnum(value.(int))
+	return nil
+}
+
+// Value custom valuer
+func (aat AppointmentActionEnum) Value() (driver.Value, error) {
+	return int(aat), nil
+}
 
 // IntTime is a trick to inject custom scanner and valuer methods.
 type IntTime time.Time
@@ -55,10 +68,11 @@ func (it IntTime) Value() (driver.Value, error) {
 
 // all possible actions for an appointment
 const (
-	Draft AppointmentActionType = iota
+	Draft AppointmentActionEnum = iota
 	Notified
 	Accepted
-	Nullified
+	CancelledByStore
+	CancelledByCustomer
 )
 
 // Sms represents a message
@@ -66,21 +80,6 @@ type Sms struct {
 	ID       string
 	Customer Customer
 	Body     string
-}
-
-// TableName implements the Tabler interface in GORM to specify table name for the Customer model
-func (Customer) TableName() string {
-	return "customer"
-}
-
-// TableName implements the Tabler interface in GORM to specify table name for the Location model
-func (Location) TableName() string {
-	return "location"
-}
-
-// TableName implements the Tabler interface in GORM to specify table name for the Appointment model
-func (Appointment) TableName() string {
-	return "appointment"
 }
 
 // AppConfig stores settings to start a server.

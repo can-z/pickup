@@ -25,7 +25,7 @@ func TestCustomer(t *testing.T) {
 		IsTestingMode:       true,
 	}
 	router, db := app.SetupRouter(appConfig)
-	db.SavePoint("customerTest")
+	db.SavePoint("test")
 	dbmigration.ApplyMigration(appConfig)
 
 	t.Run("customers empty", func(t *testing.T) {
@@ -48,7 +48,7 @@ func TestCustomer(t *testing.T) {
 			},
 		})
 		assert.Equal(t, string(expectedResponse), w.Body.String())
-		db.RollbackTo("customerTest")
+		db.RollbackTo("test")
 	})
 
 	t.Run("create customers", func(t *testing.T) {
@@ -106,7 +106,7 @@ func TestCustomer(t *testing.T) {
 		var cusByID domaintype.Customer
 		mapstructure.Decode(res.Data.(map[string]interface{})["customer"], &cusByID)
 		assert.Equal(t, cus.ID, cusByID.ID)
-		db.RollbackTo("customerTest")
+		db.RollbackTo("test")
 	})
 
 	t.Run("get nonexistent customer", func(t *testing.T) {
@@ -126,7 +126,7 @@ func TestCustomer(t *testing.T) {
 		json.Unmarshal(w.Body.Bytes(), &res)
 		require.Equal(t, 1, len(res.Errors))
 		assert.Equal(t, "customer not found", res.Errors[0].Message)
-		db.RollbackTo("customerTest")
+		db.RollbackTo("test")
 	})
 	t.Run("create customer with empty name", func(t *testing.T) {
 		var cus domaintype.Customer
@@ -148,7 +148,7 @@ func TestCustomer(t *testing.T) {
 		require.Equal(t, "friendlyName cannot be empty", res.Errors[0].Message)
 		result = db.First(&cus)
 		require.Equal(t, int64(0), result.RowsAffected)
-		db.RollbackTo("customerTest")
+		db.RollbackTo("test")
 	})
 
 	t.Run("create customer with empty phoneNumber", func(t *testing.T) {
@@ -171,7 +171,7 @@ func TestCustomer(t *testing.T) {
 		require.Equal(t, "phoneNumber cannot be empty", res.Errors[0].Message)
 		result = db.First(&cus)
 		require.Equal(t, int64(0), result.RowsAffected)
-		db.RollbackTo("customerTest")
+		db.RollbackTo("test")
 	})
 
 }

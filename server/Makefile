@@ -6,9 +6,7 @@ buildall:
 restart: buildall
 	./server
 test:
-	go clean
-	go build
-	go test
+	go test ./test -v
 resetdb:
 	rm -f local.db
 	./migrate
