@@ -1,6 +1,7 @@
 package appointment
 
 import (
+	"errors"
 	"time"
 
 	"github.com/can-z/pickup/server/domaintype"
@@ -20,6 +21,9 @@ func NewAppointmentSvc(db *gorm.DB) *Svc {
 
 // CreateAppointment creates a new appointment
 func (svc Svc) CreateAppointment(time time.Time, address string, note string) (*domaintype.Appointment, error) {
+	if len(address) == 0 {
+		return nil, errors.New("address cannot be empty")
+	}
 	locID := uuid.New()
 	aptmtID := uuid.New()
 	aptmt := domaintype.Appointment{ID: aptmtID.String(), Location: domaintype.Location{ID: locID.String(), Address: address, Note: note}, Time: domaintype.IntTime(time)}
