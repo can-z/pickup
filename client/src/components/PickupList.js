@@ -2,17 +2,18 @@
 import React, { useState } from "react";
 
 import Autosuggest from "react-autosuggest";
+import type {Node} from 'react';
 import { useHistory } from "react-router-dom";
 
-const PickupListPage: () => React$Node = () => {
+const PickupListPage: () => Node = () => {
   let history = useHistory();
 
-  const goToDetailsPage: (batchId: string) => void = (batchId) => {
+  const goToDetailsPage: (batchId: string) => void = (batchId: string) => {
     history.push("/add-pickup");
     
   };
 
-  const goToManageCustomersPage = () => {
+  const goToManageCustomersPage: () => void = () => {
     history.push("/manage-customer");
   };
   
@@ -90,7 +91,7 @@ const PickupListPage: () => React$Node = () => {
   };
   return (
     <div>
-      <div class="container-fluid m-1">
+      <div className="container-fluid m-1">
         <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
           New pickup option
         </a>
@@ -122,7 +123,7 @@ const PickupListPage: () => React$Node = () => {
         <label>Selected customers</label>
         <SelectedCustomerList selectedCustomers={selectedCustomers} />
       </div>
-      <div class="container-fluid m-1">
+      <div className="container-fluid m-1">
         <table className="table table-hover">
           <thead className="thead-dark">
             <tr>
@@ -150,7 +151,7 @@ const PickupListPage: () => React$Node = () => {
           </tbody>
         </table>
       </div>
-      <div class="container-fluid m-1">
+      <div className="container-fluid m-1">
         <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
           Finalize and notify
         </a>

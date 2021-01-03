@@ -2,7 +2,7 @@ import "./index.css";
 
 import * as serviceWorker from "./serviceWorker";
 
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 import { App } from "./App";
 import React from "react";
@@ -17,23 +17,11 @@ const client: ApolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-client
-  .query({
-    query: gql`
-      query {
-        customers {
-          id
-          friendlyName
-          phoneNumber
-        }
-      }
-    `,
-  })
-  .then((result) => console.log(result));
-
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

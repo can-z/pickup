@@ -10,24 +10,24 @@ const ModifyCustomer = () => {
     return (
         <div>
         
-        <div class="container-fluid m-1">
+        <div className="container-fluid m-1">
             <table className="table table-hover">
                 <thead className="thead-dark">
                     <tr>
                     <th scope="col-sm">Name</th>
-                    <th scope="col-sm">Email</th>   
+                    <th scope="col-sm">Phone Number</th>   
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                     <td><input type="text" placeholder="Roger" /></td>
-                    <td><input type="text" placeholder="roger@gmail.com" /></td>
+                    <td><input type="text" placeholder="12345678" /></td>
                     </tr>
                 </tbody>
             </table> 
         </div>
 
-        <div class="container-fluid m-1">
+        <div className="container-fluid m-1">
             <button type="button" onClick={manageCustomer} className="btn btn-secondary mx-1">
             Back
             </button>
