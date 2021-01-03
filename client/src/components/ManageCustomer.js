@@ -17,10 +17,13 @@ query {
 const ManageCustomer = () => {
     const history = useHistory();
     const backToLanding = () => {
-    history.push("/");
+        history.push("/");
     };
     const ModifyCustomer = () => {
-    history.push("/modify-a-customer")
+        history.push("/modify-a-customer")
+    };
+    const CreateCustomer = () => {
+        history.push("/create-customer")  
     };
 
     const CustomerData = () => {   
@@ -46,7 +49,7 @@ const ManageCustomer = () => {
          <div>
             
             <div className="container-fluid m-1">
-                <button type="button" className="btn btn-primary mx-1">New Customer</button>
+                <button type="button" className="btn btn-primary mx-1" onClick={CreateCustomer}>New Customer</button>
                 <button type="button" onClick={backToLanding} className="btn btn-secondary mx-1">
                 Back
                 </button>
