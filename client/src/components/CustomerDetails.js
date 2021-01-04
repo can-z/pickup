@@ -3,7 +3,7 @@ import { gql, useMutation } from '@apollo/client';
 
 import { useHistory } from "react-router-dom";
 
-const EDIT_CUSTOMER = gql`
+const CUSTOMER_DETAILS = gql`
     mutation EditCustomer($friendlyName:String! $phoneNumber:String!) {
         createUser(friendlyName:$friendlyName, phoneNumber:$phoneNumber) {
             id,
@@ -12,7 +12,7 @@ const EDIT_CUSTOMER = gql`
         }
     }
 `;
-const EditCustomer = () => {
+const CustomerDetails = () => {
     const history = useHistory();
     const manageCustomer = () => {
     history.push("/manage-customer");
@@ -21,7 +21,7 @@ const EditCustomer = () => {
     const [ editCustomerName, setEditCustomerName ] = useState('');
     const [ editCustomerNumber, setCustomerNumber ] = useState('');
 
-    const [ createUser ] = useMutation(EDIT_CUSTOMER);
+    const [ createUser ] = useMutation(CUSTOMER_DETAILS);
         
         return(
             <div className="container-fluid m-1">
@@ -36,7 +36,6 @@ const EditCustomer = () => {
                         type="text" 
                         name="name" 
                         placeholder="Give a name"
-                        // ref={node => { input = node;}}
                         value={editCustomerName}
                         onChange={e => (setEditCustomerName(e.target.value))}
                     />
@@ -67,4 +66,4 @@ const EditCustomer = () => {
         );
 };
 
-export default EditCustomer;
+export default CustomerDetails;
