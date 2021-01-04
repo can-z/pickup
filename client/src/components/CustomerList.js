@@ -4,7 +4,7 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-const MANAGE_CUSTOMERS = gql`
+const FETCH_CUSTOMER = gql`
 query {
   customers {
     id
@@ -14,7 +14,7 @@ query {
 }
 `;
 
-const ManageCustomer = () => {
+const CustomerList = () => {
     const history = useHistory();
     const backToLanding = () => {
         history.push("/");
@@ -23,11 +23,11 @@ const ManageCustomer = () => {
         history.push("/modify-a-customer")
     };
     const CreateCustomer = () => {
-        history.push("/create-customer")  
+        history.push("/create-a-customer")  
     };
 
     const CustomerData = () => {   
-        const {loading, error, data } = useQuery(MANAGE_CUSTOMERS);
+        const {loading, error, data } = useQuery(FETCH_CUSTOMER);
     
         if(loading) return <tr><td>Loading...</td></tr>;
         if(error) return <tr><td>Loading...</td></tr>;
@@ -75,4 +75,4 @@ const ManageCustomer = () => {
     );
 };
 
-export default ManageCustomer;
+export default CustomerList;
