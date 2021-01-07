@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
 import { useHistory } from "react-router-dom";
 
@@ -12,14 +12,41 @@ const CUSTOMER_DETAILS = gql`
         }
     }
 `;
+
+const FETCH_CUSTOMER = gql`
+    query Customer($id: String! ) {
+        customer(id: $id) {
+            id
+            friendlyName
+        }
+    }
+`;
+
 const CustomerDetails = () => {
+    
     const history = useHistory();
     const manageCustomer = () => {
     history.push("/manage-customer");
     };
-
+    const urlInfo = window.location.href.split('/');
+    const KnownUserName = urlInfo[4];
+    
     const [ editCustomerName, setEditCustomerName ] = useState('');
     const [ editCustomerNumber, setCustomerNumber ] = useState('');
+
+    const FetchCustomer = () => {
+ 
+        const {loading, error, data } = useQuery(FETCH_CUSTOMER, {
+            variables: 5,
+        });
+        
+        if(loading) return <p>Loading...</p>;
+        if(error) return <p>Error :(</p>;
+    
+        return (
+            <p>{data.customer.friendlyName}</p>
+        )            
+    };
 
     const [ createUser ] = useMutation(CUSTOMER_DETAILS);
         
@@ -53,6 +80,7 @@ const CustomerDetails = () => {
 
                     <button type="submit" className="btn btn-primary mx-1"> Submit </button>
                 </form>
+                {FetchCustomer()}
 
                 <div className="container-fluid m-1">
                     <button type="button" onClick={manageCustomer} className="btn btn-secondary mx-1">

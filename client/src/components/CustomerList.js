@@ -19,14 +19,15 @@ const CustomerList = () => {
     const backToLanding = () => {
         history.push("/");
     };
-    const ModifyCustomer = () => {
-        history.push("/modify-a-customer")
+    const ModifyCustomer = (id) => {
+        history.push(`/modify-a-customer/${id}`)
     };
-    const CreateCustomer = () => {
-        history.push("/create-a-customer")  
-    };
+    const CreateCustomer = (friendlyName) => {
+        history.push("/create-a-customer")
+    };  
 
-    const CustomerData = () => {   
+    const CustomerData = () => {
+ 
         const {loading, error, data } = useQuery(FETCH_CUSTOMER);
     
         if(loading) return <tr><td>Loading...</td></tr>;
@@ -38,7 +39,7 @@ const CustomerList = () => {
                 <td>{friendlyName}</td>
                 <td>{phoneNumber}</td>
                 <td>
-                    <button type="button" className="btn btn-light mx-1" onClick={ModifyCustomer} ><AiOutlineEdit size={32}/>
+                    <button type="button" className="btn btn-light mx-1" onClick={() => ModifyCustomer(id)} ><AiOutlineEdit size={32}/>
                     </button>
                 </td>
             </tr>
