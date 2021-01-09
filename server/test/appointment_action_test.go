@@ -33,9 +33,9 @@ func TestAppointmentAction(t *testing.T) {
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(gin.H{
 			"query": fmt.Sprintf(`mutation {
-				createAppointmentAction(appointmentID: "abc", type: 1, customerID: "%s") {
+				createAppointmentAction(appointmentID: "abc", actionType: 1, customerID: "%s") {
 				  id
-				  type
+				  actionType
 				  createdAt
 				  customer{friendlyName}
 				  appointment{id}

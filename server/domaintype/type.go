@@ -34,22 +34,22 @@ type AppointmentAction struct {
 	Appointment   Appointment
 	CustomerID    string
 	Customer      Customer
-	Type          AppointmentActionEnum
+	ActionType    AppointmentActionEnum
 	CreatedAt     IntTime
 }
 
 // AppointmentActionEnum represents action types
-type AppointmentActionEnum int
+type AppointmentActionEnum int64
 
 // Scan custom scanner
 func (aat AppointmentActionEnum) Scan(value interface{}) error {
-	aat = AppointmentActionEnum(value.(int))
+	aat = AppointmentActionEnum(value.(int64))
 	return nil
 }
 
 // Value custom valuer
 func (aat AppointmentActionEnum) Value() (driver.Value, error) {
-	return int(aat), nil
+	return int64(aat), nil
 }
 
 // IntTime is a trick to inject custom scanner and valuer methods.

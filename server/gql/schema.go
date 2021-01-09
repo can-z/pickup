@@ -1,12 +1,12 @@
 package gql
 
 import (
-	"errors"
 	"log"
 	"strconv"
 	"time"
 
 	"github.com/can-z/pickup/server/appointment"
+	"github.com/can-z/pickup/server/appointmentaction"
 	"github.com/can-z/pickup/server/customer"
 	"github.com/can-z/pickup/server/domaintype"
 	"github.com/can-z/pickup/server/sms"
@@ -174,7 +174,7 @@ var appointmentActionType = graphql.NewObject(
 			"appointment": &graphql.Field{
 				Type: appointmentType,
 			},
-			"type": &graphql.Field{
+			"actionType": &graphql.Field{
 				Type: appointmentActionEnumType,
 			},
 			"createdAt": &graphql.Field{
@@ -196,6 +196,7 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 	}
 	customerSvc := customer.NewCustomerSvc(db)
 	appointmentSvc := appointment.NewAppointmentSvc(db)
+	appointmentActionSvc := appointmentaction.NewAppointmentActionSvc(db)
 
 	fields := graphql.Fields{
 		"customers": &graphql.Field{
@@ -277,7 +278,7 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 				Type:        appointmentActionType,
 				Description: "Create a new appointment action",
 				Args: graphql.FieldConfigArgument{
-					"type": &graphql.ArgumentConfig{
+					"actionType": &graphql.ArgumentConfig{
 						Type: appointmentActionEnumType,
 					},
 					"appointmentID": &graphql.ArgumentConfig{
@@ -288,11 +289,18 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-					cus, err := customerSvc.GetCustomer(params.Args["customerID"].(string))
-					if err != nil {
-						return nil, errors.New("customerID does not exist")
-					}
-					return &domaintype.AppointmentAction{Customer: *cus, Type: domaintype.Draft, CreatedAt: domaintype.IntTime(time.Now()), Appointment: domaintype.Appointment{ID: "123"}}, nil
+					// customerID := params.Args["customerID"].(string)
+					// cus, err := customerSvc.GetCustomer(customerID)
+					// if err != nil {
+					// 	return nil, errors.New("customerID does not exist")
+					// }
+
+					// aptmtID := params.Args["customerID"].(string)
+					// aptmt, err := appointmentSvc.GetAppointment(aptmtID)
+					// if err != nil {
+					// 	return nil, errors.New("customerID does not exist")
+					// }
+					return appointmentActionSvc.CreateAppointmentAction(params.Args["appointmentID"].(string), params.Args["customerID"].(string), params.Args["actionType"].(domaintype.AppointmentActionEnum))
 				},
 			},
 		}})
