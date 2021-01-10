@@ -224,9 +224,9 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 		Fields: graphql.Fields{
 			"sendSms": &graphql.Field{
 				Type:        graphql.Boolean,
-				Description: "Send a sms to a user",
+				Description: "Send a sms to a customer",
 				Args: graphql.FieldConfigArgument{
-					"username": &graphql.ArgumentConfig{
+					"customerID": &graphql.ArgumentConfig{
 						Type: graphql.NewNonNull(graphql.String),
 					},
 					"body": &graphql.ArgumentConfig{
@@ -240,9 +240,9 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 					return true, nil
 				},
 			},
-			"createUser": &graphql.Field{
+			"createCustomer": &graphql.Field{
 				Type:        customerType,
-				Description: "Create a new user",
+				Description: "Create a new customer",
 				Args: graphql.FieldConfigArgument{
 					"friendlyName": &graphql.ArgumentConfig{
 						Type: graphql.NewNonNull(graphql.String),
@@ -253,6 +253,18 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					return customerSvc.CreateCustomer(&domaintype.Customer{FriendlyName: params.Args["friendlyName"].(string), PhoneNumber: params.Args["phoneNumber"].(string)})
+				},
+			},
+			"deleteCustomer": &graphql.Field{
+				Type:        customerType,
+				Description: "Delete a customer",
+				Args: graphql.FieldConfigArgument{
+					"id": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.ID),
+					},
+				},
+				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+					return nil, customerSvc.DeleteCustomer(params.Args["id"].(string))
 				},
 			},
 			"createAppointment": &graphql.Field{

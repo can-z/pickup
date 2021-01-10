@@ -58,7 +58,7 @@ func TestCustomer(t *testing.T) {
 
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(gin.H{
-			"query": `mutation createUser{createUser(friendlyName:"a", phoneNumber:"123456789"){
+			"query": `mutation createCustomer{createCustomer(friendlyName:"a", phoneNumber:"123456789"){
 				id
 			  }}`,
 		})
@@ -72,10 +72,10 @@ func TestCustomer(t *testing.T) {
 		assert.Equal(t, "a", cus.FriendlyName)
 		assert.Equal(t, "123456789", cus.PhoneNumber)
 
-		// create a second user with the same phone number
+		// create a second customer with the same phone number
 		w = httptest.NewRecorder()
 		payload, _ = json.Marshal(gin.H{
-			"query": `mutation createUser{createUser(friendlyName:"a", phoneNumber:"123456789"){
+			"query": `mutation createCustomer{createCustomer(friendlyName:"a", phoneNumber:"123456789"){
 				id
 			  }}`,
 		})
@@ -106,6 +106,32 @@ func TestCustomer(t *testing.T) {
 		var cusByID domaintype.Customer
 		mapstructure.Decode(res.Data.(map[string]interface{})["customer"], &cusByID)
 		assert.Equal(t, cus.ID, cusByID.ID)
+
+		// Test delete customer
+		w = httptest.NewRecorder()
+		payload, _ = json.Marshal(gin.H{
+			"query": fmt.Sprintf(`mutation deleteCustomer{deleteCustomer(id: "%s"){
+				id
+			  }}`, cus.ID),
+		})
+		req, _ = http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
+		router.ServeHTTP(w, req)
+		assert.Equal(t, 200, w.Code)
+		result = db.First(&cus)
+		assert.Equal(t, int64(0), result.RowsAffected)
+
+		// Test delete nonexistent customer
+		w = httptest.NewRecorder()
+		payload, _ = json.Marshal(gin.H{
+			"query": fmt.Sprintf(`mutation deleteCustomer{deleteCustomer(id: "%s"){
+				id
+			  }}`, cus.ID),
+		})
+		req, _ = http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
+		router.ServeHTTP(w, req)
+		assert.Equal(t, 200, w.Code)
+		json.Unmarshal(w.Body.Bytes(), &res)
+		require.Equal(t, "id not found", res.Errors[0].Message)
 		db.RollbackTo("test")
 	})
 
@@ -135,7 +161,7 @@ func TestCustomer(t *testing.T) {
 
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(gin.H{
-			"query": `mutation createUser{createUser(friendlyName:"", phoneNumber:"123456789"){
+			"query": `mutation createCustomer{createCustomer(friendlyName:"", phoneNumber:"123456789"){
 				id
 			  }}`,
 		})
@@ -158,7 +184,7 @@ func TestCustomer(t *testing.T) {
 
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(gin.H{
-			"query": `mutation createUser{createUser(friendlyName:"Can", phoneNumber:""){
+			"query": `mutation createCustomer{createCustomer(friendlyName:"Can", phoneNumber:""){
 				id
 			  }}`,
 		})

@@ -59,3 +59,15 @@ func (svc Svc) CreateCustomer(cus *domaintype.Customer) (*domaintype.Customer, e
 	svc.db.Create(&customer)
 	return &customer, nil
 }
+
+// DeleteCustomer deletes a customer
+func (svc Svc) DeleteCustomer(customerID string) error {
+	if len(customerID) == 0 {
+		return errors.New("id cannot be empty")
+	}
+	result := svc.db.Delete(&domaintype.Customer{ID: customerID})
+	if result.RowsAffected == 0 {
+		return errors.New("id not found")
+	}
+	return result.Error
+}
