@@ -1,7 +1,7 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
-import { AiOutlineEdit } from 'react-icons/ai';
 import React from "react";
+import { RiDeleteBin2Line } from 'react-icons/ri';
 import { useHistory } from "react-router-dom";
 
 const FETCH_CUSTOMER = gql`
@@ -14,21 +14,30 @@ query {
 }
 `;
 
+const DELETE_CUSTOMER = gql`
+mutation deleteCustomer($id: ID!){
+    deleteCustomer(id: $id){
+    id
+  }}
+`;
+
 const CustomerList = () => {
     const history = useHistory();
     const backToLanding = () => {
         history.push("/");
     };
-    const ModifyCustomer = (id) => {
-        history.push(`/modify-a-customer/${id}`)
-    };
-    const CreateCustomer = (friendlyName) => {
+
+    const CreateCustomer = () => {
         history.push("/create-a-customer")
     };  
 
+    const [deleteCustomer] = useMutation(DELETE_CUSTOMER, {
+        refetchQueries: [{query: FETCH_CUSTOMER}],
+    });
+
     const CustomerData = () => {
  
-        const {loading, error, data } = useQuery(FETCH_CUSTOMER);
+        const {loading, error, data} = useQuery(FETCH_CUSTOMER);
     
         if(loading) return <tr><td>Loading...</td></tr>;
         if(error) return <tr><td>Loading...</td></tr>;
@@ -39,7 +48,8 @@ const CustomerList = () => {
                 <td>{friendlyName}</td>
                 <td>{phoneNumber}</td>
                 <td>
-                    <button type="button" className="btn btn-light mx-1" onClick={() => ModifyCustomer(id)} ><AiOutlineEdit size={32}/>
+                    <button type="button" className="btn btn-light mx-1" onClick={() => deleteCustomer({variables: {id: id}})} >
+                        <RiDeleteBin2Line size={32}/>
                     </button>
                 </td>
             </tr>
