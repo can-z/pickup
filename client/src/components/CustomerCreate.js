@@ -3,32 +3,32 @@ import { gql, useMutation } from '@apollo/client';
 
 import { useHistory } from "react-router-dom";
 
-const CUSTOMER_DETAILS = gql`
-    mutation EditCustomer($friendlyName:String! $phoneNumber:String!) {
-        createUser(friendlyName:$friendlyName, phoneNumber:$phoneNumber) {
+const CUSTOMER_CREATE = gql`
+    mutation CreateCustomer($friendlyName:String! $phoneNumber:String!) {
+        createCustomer(friendlyName:$friendlyName, phoneNumber:$phoneNumber) {
             id,
             friendlyName,
             phoneNumber 
         }
     }
 `;
-const CustomerDetails = () => {
+const CustomerCreate = () => {
     const history = useHistory();
-    const manageCustomer = () => {
+    const backToLanding = () => {
     history.push("/manage-customer");
     };
 
-    const [ editCustomerName, setEditCustomerName ] = useState('');
-    const [ editCustomerNumber, setCustomerNumber ] = useState('');
+    const [ newCustomerName, setNewCustomerName ] = useState('');
+    const [ newCustomerNumber, setNewCustomerNumber ] = useState('');
 
-    const [ createUser ] = useMutation(CUSTOMER_DETAILS);
+    const [ createUser ] = useMutation(CUSTOMER_CREATE);
         
         return(
             <div className="container-fluid m-1">
                 <form
                     onSubmit={e => {
                         e.preventDefault();
-                        createUser({ variables: {friendlyName: editCustomerName, phoneNumber: editCustomerNumber }});
+                        createUser({ variables: {friendlyName: newCustomerName, phoneNumber: newCustomerNumber }});
                     }}
                 >
                     <label>Name:
@@ -36,18 +36,17 @@ const CustomerDetails = () => {
                         type="text" 
                         name="name" 
                         placeholder="Give a name"
-                        value={editCustomerName}
-                        onChange={e => (setEditCustomerName(e.target.value))}
+                        value={newCustomerName}
+                        onChange={e => (setNewCustomerName(e.target.value))}
                     />
                     </label>
-
                     <label>Phone Number:
                     <input 
                         type="text" 
                         name="phonenumber" 
                         placeholder="Give a number"
-                        value={editCustomerNumber}
-                        onChange={e => (setCustomerNumber(e.target.value))}
+                        value={newCustomerNumber}
+                        onChange={e => (setNewCustomerNumber(e.target.value))}
                     />
                     </label>
 
@@ -55,15 +54,12 @@ const CustomerDetails = () => {
                 </form>
 
                 <div className="container-fluid m-1">
-                    <button type="button" onClick={manageCustomer} className="btn btn-secondary mx-1">
+                    <button type="button" onClick={backToLanding} className="btn btn-secondary mx-1">
                     Back
                     </button>
-                    {/* <button type="button" onClick={manageCustomer} className="btn btn-danger mx-1">
-                    Delete
-                    </button> */}
                 </div>
             </div>      
         );
 };
 
-export default CustomerDetails;
+export default CustomerCreate;

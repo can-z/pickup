@@ -19,9 +19,6 @@ const CustomerList = () => {
     const backToLanding = () => {
         history.push("/");
     };
-    const ModifyCustomer = () => {
-        history.push("/modify-a-customer")
-    };
     const CreateCustomer = () => {
         history.push("/create-a-customer")  
     };
@@ -38,7 +35,7 @@ const CustomerList = () => {
                 <td>{friendlyName}</td>
                 <td>{phoneNumber}</td>
                 <td>
-                    <button type="button" className="btn btn-light mx-1" onClick={ModifyCustomer} ><AiOutlineEdit size={32}/>
+                    <button type="button" className="btn btn-light mx-1" ><AiOutlineEdit size={32}/>
                     </button>
                 </td>
             </tr>

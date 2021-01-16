@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
-import CustomerDetails from "./components/CustomerDetails";
+import CustomerCreate from "./components/CustomerCreate";
 import CustomerList from "./components/CustomerList";
 import PickupDetail from "./components/PickupDetail";
 import PickupListPage from "./components/PickupList";
@@ -27,11 +27,8 @@ const App: () => React$Node = () => {
         <Route exact path="/manage-customer">
           <CustomerList />
         </Route>
-        <Route exact path="/modify-a-customer">
-          <CustomerDetails />
-        </Route>
         <Route exact path="/create-a-customer">
-          <CustomerDetails />
+          <CustomerCreate />
         </Route>
       </Switch>
     </Router>
