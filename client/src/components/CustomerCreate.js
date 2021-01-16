@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { gql, useMutation } from '@apollo/client';
 
+import { FETCH_CUSTOMER } from "./CustomerList";
 import { useHistory } from "react-router-dom";
 
-const CUSTOMER_DETAILS = gql`
+const CUSTOMER_CREATE = gql`
     mutation CreateCustomer($friendlyName:String! $phoneNumber:String!) {
         createCustomer(friendlyName:$friendlyName, phoneNumber:$phoneNumber) {
             id,
@@ -23,7 +24,9 @@ const CustomerCreate = () => {
     const [ newCustomerName, setNewCustomerName ] = useState('');
     const [ newCustomerNumber, setNewCustomerNumber ] = useState('');
 
-    const [ createUser ] = useMutation(CUSTOMER_DETAILS);
+    const [ createUser ] = useMutation(CUSTOMER_CREATE, {
+        refetchQueries: [{query: FETCH_CUSTOMER}],
+    });
     
         return(
             <div className="container-fluid m-1">

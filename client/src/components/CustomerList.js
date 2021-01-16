@@ -4,7 +4,7 @@ import React from "react";
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import { useHistory } from "react-router-dom";
 
-const FETCH_CUSTOMER = gql`
+export const FETCH_CUSTOMER = gql`
 query {
   customers {
     id
@@ -13,7 +13,7 @@ query {
   }
 }
 `;
-
+   
 const DELETE_CUSTOMER = gql`
 mutation deleteCustomer($id: ID!){
     deleteCustomer(id: $id){
