@@ -1,6 +1,9 @@
 package domaintype
 
-import "time"
+import (
+	"database/sql/driver"
+	"time"
+)
 
 // Customer is the domain representation of a customer
 type Customer struct {
@@ -18,29 +21,58 @@ type Location struct {
 
 // Appointment represents a time for customers to pick up their items.
 type Appointment struct {
-	ID       string
-	Location Location
-	Time     time.Time
+	ID         string
+	LocationID string
+	Location   Location
+	Time       IntTime
 }
 
 // AppointmentAction stores actions that have been performed for an appointment.
 type AppointmentAction struct {
-	ID          string
-	Appointment Appointment
-	Customer    Customer
-	Action      AppointmentActionType
-	CreatedAt   time.Time
+	ID            string
+	AppointmentID string
+	Appointment   Appointment
+	CustomerID    string
+	Customer      Customer
+	ActionType    AppointmentActionEnum
+	CreatedAt     IntTime
 }
 
-// AppointmentActionType represents action types
-type AppointmentActionType int
+// AppointmentActionEnum represents action types
+type AppointmentActionEnum int64
+
+// Scan custom scanner
+func (aat AppointmentActionEnum) Scan(value interface{}) error {
+	aat = AppointmentActionEnum(value.(int64))
+	return nil
+}
+
+// Value custom valuer
+func (aat AppointmentActionEnum) Value() (driver.Value, error) {
+	return int64(aat), nil
+}
+
+// IntTime is a trick to inject custom scanner and valuer methods.
+type IntTime time.Time
+
+// Scan custom scanner
+func (it IntTime) Scan(value interface{}) error {
+	it = IntTime(time.Unix(value.(int64), 0))
+	return nil
+}
+
+// Value custom valuer
+func (it IntTime) Value() (driver.Value, error) {
+	return time.Time(it).Unix(), nil
+}
 
 // all possible actions for an appointment
 const (
-	Draft AppointmentActionType = iota
+	Draft AppointmentActionEnum = iota
 	Notified
 	Accepted
-	Nullified
+	CancelledByStore
+	CancelledByCustomer
 )
 
 // Sms represents a message
@@ -48,11 +80,6 @@ type Sms struct {
 	ID       string
 	Customer Customer
 	Body     string
-}
-
-// TableName implements the Tabler interface in GORM to specify table name for the Customer model
-func (Customer) TableName() string {
-	return "customer"
 }
 
 // AppConfig stores settings to start a server.

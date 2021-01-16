@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/can-z/pickup/server/app"
+	"github.com/can-z/pickup/server/dbmigration"
 	"github.com/can-z/pickup/server/domaintype"
 	"github.com/spf13/viper"
 	"gorm.io/driver/sqlite"
@@ -36,6 +37,7 @@ func main() {
 		DatabaseFile:        runtimeViper.GetString("databaseFile"),
 		MigrationFolderPath: ".",
 	}
+	dbmigration.ApplyMigration(appConfig)
 	populateCustomerTable(appConfig)
 	r, _ := app.SetupRouter(appConfig)
 	_ = r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
