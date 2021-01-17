@@ -222,6 +222,17 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 				return appointmentSvc.GetAllAppointments(), nil
 			},
 		},
+		"appointment": &graphql.Field{
+			Type: appointmentType,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				return appointmentSvc.GetAppointment(params.Args["id"].(string))
+			},
+		},
 	}
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
 

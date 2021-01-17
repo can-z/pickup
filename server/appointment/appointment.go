@@ -29,6 +29,17 @@ func (svc Svc) GetAllAppointments() []*domaintype.Appointment {
 	return allAppointments
 }
 
+// GetAppointment gets an Appointment by ID
+func (svc Svc) GetAppointment(id string) (*domaintype.Appointment, error) {
+
+	var apptmt domaintype.Appointment
+	result := svc.db.Preload("Location").Where(&domaintype.Appointment{ID: id}).First(&apptmt)
+	if result.RowsAffected == 0 {
+		return nil, errors.New("appointments not found")
+	}
+	return &apptmt, nil
+}
+
 // CreateAppointment creates a new appointment
 func (svc Svc) CreateAppointment(startTime time.Time, endTime time.Time, address string, note string) (*domaintype.Appointment, error) {
 	if len(address) == 0 {

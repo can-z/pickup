@@ -3,6 +3,7 @@ package test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -75,6 +76,29 @@ func TestAppointment(t *testing.T) {
 		require.Equal(t, 1, len(allappts))
 		assert.Equal(t, 1609508032, allappts[0].StartTime.ToInt())
 		assert.Equal(t, 1609509032, allappts[0].EndTime.ToInt())
+
+		payload, _ = json.Marshal(gin.H{
+			"query": fmt.Sprintf(`{appointment(id: "%s"){
+			  id
+			  startTime
+			  endTime
+			  location{
+				  id
+				  address
+			  }
+			}}`, aptmt.ID),
+		})
+
+		req, _ = http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
+		w = httptest.NewRecorder()
+		router.ServeHTTP(w, req)
+		require.Equal(t, 200, w.Code)
+		json.Unmarshal(w.Body.Bytes(), &res)
+		var fetchedApptmtByID domaintype.Appointment
+		data = res.Data.(map[string]interface{})["appointment"]
+		domaintype.Decode(data, &fetchedApptmtByID)
+		assert.Equal(t, 1609508032, fetchedApptmtByID.StartTime.ToInt())
+		assert.Equal(t, 1609509032, fetchedApptmtByID.EndTime.ToInt())
 		db.RollbackTo("test")
 	})
 
