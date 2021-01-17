@@ -34,6 +34,11 @@ func (svc Svc) CreateAppointment(startTime time.Time, endTime time.Time, address
 	if len(address) == 0 {
 		return nil, errors.New("address cannot be empty")
 	}
+
+	if endTime.Before(startTime) {
+		return nil, errors.New("endTime must be after startTime")
+	}
+
 	locID := uuid.New()
 	aptmtID := uuid.New()
 	aptmt := domaintype.Appointment{ID: aptmtID.String(), Location: domaintype.Location{ID: locID.String(), Address: address, Note: note}, StartTime: domaintype.IntTime(startTime), EndTime: domaintype.IntTime(endTime)}

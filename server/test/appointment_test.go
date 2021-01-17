@@ -102,4 +102,29 @@ func TestAppointment(t *testing.T) {
 		require.Equal(t, int64(0), result.RowsAffected)
 		db.RollbackTo("test")
 	})
+
+	t.Run("create an appointment with invalid start and end times", func(t *testing.T) {
+		var aptmt domaintype.Appointment
+		result := db.First(&aptmt)
+		require.Equal(t, int64(0), result.RowsAffected)
+		w := httptest.NewRecorder()
+		payload, _ := json.Marshal(gin.H{
+			"query": `mutation createAppointment{
+			createAppointment(startTime: 1609508032, endTime: 1609507032, address: "1 Yonge St.", note: ""){
+			  id
+			}
+		  }`,
+		}) // endTime < startTime
+
+		req, _ := http.NewRequest("POST", "/graphql", bytes.NewBuffer(payload))
+		router.ServeHTTP(w, req)
+
+		require.Equal(t, 200, w.Code)
+		var res graphql.Result
+		json.Unmarshal(w.Body.Bytes(), &res)
+		require.Equal(t, "endTime must be after startTime", res.Errors[0].Message)
+		result = db.First(&aptmt)
+		require.Equal(t, int64(0), result.RowsAffected)
+		db.RollbackTo("test")
+	})
 }
