@@ -1,8 +1,11 @@
 // @flow
+
+import "./PickupList.css";
+
 import React, { useState } from "react";
 
 import Autosuggest from "react-autosuggest";
-import type {Node} from 'react';
+import type { Node } from "react";
 import { useHistory } from "react-router-dom";
 
 const PickupListPage: () => Node = () => {
@@ -10,13 +13,12 @@ const PickupListPage: () => Node = () => {
 
   const goToDetailsPage: (batchId: string) => void = (batchId: string) => {
     history.push("/add-pickup");
-    
   };
 
   const goToManageCustomersPage: () => void = () => {
     history.push("/manage-customer");
   };
-  
+
   let [unselectedCustomers, setUnselectedCustomers] = useState([
     "Roger",
     "Rogers",
@@ -95,7 +97,11 @@ const PickupListPage: () => Node = () => {
         <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
           New pickup option
         </a>
-        <button type="button" onClick={goToManageCustomersPage} className="btn btn-secondary mx-1">
+        <button
+          type="button"
+          onClick={goToManageCustomersPage}
+          className="btn btn-secondary mx-1"
+        >
           Manage customers
         </button>
       </div>
