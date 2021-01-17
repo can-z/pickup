@@ -24,7 +24,7 @@ const App: () => React$Node = () => {
         <Route exact path="/add-pickup">
           <PickupDetail />
         </Route>
-        <Route exact path="/manage-customer">
+        <Route exact path="/customer-list">
           <CustomerList />
         </Route>
         <Route exact path="/create-a-customer">

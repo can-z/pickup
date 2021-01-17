@@ -17,8 +17,8 @@ const CUSTOMER_CREATE = gql`
 const CustomerCreate = () => {
     
     const history = useHistory();
-    const manageCustomer = () => {
-    history.push("/manage-customer");
+    const backToCustomerList = () => {
+    history.push("/customer-list");
     };
     
     const [ newCustomerName, setNewCustomerName ] = useState('');
@@ -55,11 +55,11 @@ const CustomerCreate = () => {
                         onChange={e => (setNewCustomerNumber(e.target.value))}
                     />
                     </label>
-                    <button type="submit" className="btn btn-primary mx-1"> Submit </button>
+                    <button type="submit" onClick={backToCustomerList} className="btn btn-primary mx-1"> Submit </button>
                 </form>
 
                 <div className="container-fluid m-1">
-                    <button type="button" onClick={manageCustomer} className="btn btn-secondary mx-1">
+                    <button type="button" onClick={backToCustomerList} className="btn btn-secondary mx-1">
                     Back
                     </button>
                 </div>
