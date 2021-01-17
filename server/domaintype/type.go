@@ -24,7 +24,8 @@ type Appointment struct {
 	ID         string
 	LocationID string
 	Location   Location
-	Time       IntTime
+	StartTime  IntTime
+	EndTime    IntTime
 }
 
 // AppointmentAction stores actions that have been performed for an appointment.

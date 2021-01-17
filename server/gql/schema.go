@@ -148,7 +148,10 @@ var appointmentType = graphql.NewObject(
 			"id": &graphql.Field{
 				Type: graphql.ID,
 			},
-			"time": &graphql.Field{
+			"startTime": &graphql.Field{
+				Type: intTimeType,
+			},
+			"endTime": &graphql.Field{
 				Type: intTimeType,
 			},
 			"location": &graphql.Field{
@@ -274,7 +277,10 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 				Type:        appointmentType,
 				Description: "Create a new appointment",
 				Args: graphql.FieldConfigArgument{
-					"time": &graphql.ArgumentConfig{
+					"startTime": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.Int),
+					},
+					"endTime": &graphql.ArgumentConfig{
 						Type: graphql.NewNonNull(graphql.Int),
 					},
 					"address": &graphql.ArgumentConfig{
@@ -285,8 +291,9 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-					time := time.Unix(int64(params.Args["time"].(int)), 0)
-					return appointmentSvc.CreateAppointment(time, params.Args["address"].(string), params.Args["note"].(string))
+					startTime := time.Unix(int64(params.Args["startTime"].(int)), 0)
+					endTime := time.Unix(int64(params.Args["endTime"].(int)), 0)
+					return appointmentSvc.CreateAppointment(startTime, endTime, params.Args["address"].(string), params.Args["note"].(string))
 				},
 			},
 			"createAppointmentAction": &graphql.Field{

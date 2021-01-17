@@ -33,7 +33,7 @@ func TestAppointment(t *testing.T) {
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(gin.H{
 			"query": `mutation createAppointment{
-			createAppointment(time: 1609508032, address: "1 Yonge St." note: ""){
+			createAppointment(startTime: 1609508032, endTime: 1609509032, address: "1 Yonge St.", note: ""){
 			  id
 			}
 		  }`,
@@ -45,7 +45,8 @@ func TestAppointment(t *testing.T) {
 		assert.Equal(t, 200, w.Code)
 		result = db.First(&aptmt)
 		require.Equal(t, int64(1), result.RowsAffected)
-		require.Equal(t, 1609508032, aptmt.Time.ToInt())
+		require.Equal(t, 1609508032, aptmt.StartTime.ToInt())
+		require.Equal(t, 1609509032, aptmt.EndTime.ToInt())
 		var loc domaintype.Location
 		result = db.First(&loc)
 		require.Equal(t, int64(1), result.RowsAffected)
@@ -53,7 +54,8 @@ func TestAppointment(t *testing.T) {
 		payload, _ = json.Marshal(gin.H{
 			"query": `{appointments{
 			  id
-			  time
+			  startTime
+			  endTime
 			  location{
 				  id
 				  address
@@ -71,7 +73,8 @@ func TestAppointment(t *testing.T) {
 		data := res.Data.(map[string]interface{})["appointments"]
 		domaintype.Decode(data, &allappts)
 		require.Equal(t, 1, len(allappts))
-		assert.Equal(t, 1609508032, allappts[0].Time.ToInt())
+		assert.Equal(t, 1609508032, allappts[0].StartTime.ToInt())
+		assert.Equal(t, 1609509032, allappts[0].EndTime.ToInt())
 		db.RollbackTo("test")
 	})
 
@@ -82,7 +85,7 @@ func TestAppointment(t *testing.T) {
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(gin.H{
 			"query": `mutation createAppointment{
-			createAppointment(time: 1609508032, address: "" note: ""){
+			createAppointment(startTime: 1609508032, endTime: 1609509032, address: "", note: ""){
 			  id
 			}
 		  }`,

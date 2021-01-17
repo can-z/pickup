@@ -8,7 +8,8 @@ create table location (
 create table appointment (
     id TEXT, 
     location_id TEXT, 
-    time INTEGER,
+    start_time INTEGER,
+    end_time INTEGER,
     PRIMARY KEY (id)
     FOREIGN KEY(location_id) REFERENCES location(id)
 );

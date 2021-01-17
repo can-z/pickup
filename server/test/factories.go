@@ -12,7 +12,9 @@ import (
 // AppointmentFactory creates an appointment for testing
 func AppointmentFactory(db *gorm.DB) *domaintype.Appointment {
 	svc := appointment.NewAppointmentSvc(db)
-	aptmt, _ := svc.CreateAppointment(time.Now(), "1 Yonge st", "")
+	h, _ := time.ParseDuration("1h")
+	startTime := time.Now()
+	aptmt, _ := svc.CreateAppointment(startTime, startTime.Add(h), "1 Yonge st", "")
 	return aptmt
 }
 

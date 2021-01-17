@@ -30,13 +30,13 @@ func (svc Svc) GetAllAppointments() []*domaintype.Appointment {
 }
 
 // CreateAppointment creates a new appointment
-func (svc Svc) CreateAppointment(time time.Time, address string, note string) (*domaintype.Appointment, error) {
+func (svc Svc) CreateAppointment(startTime time.Time, endTime time.Time, address string, note string) (*domaintype.Appointment, error) {
 	if len(address) == 0 {
 		return nil, errors.New("address cannot be empty")
 	}
 	locID := uuid.New()
 	aptmtID := uuid.New()
-	aptmt := domaintype.Appointment{ID: aptmtID.String(), Location: domaintype.Location{ID: locID.String(), Address: address, Note: note}, Time: domaintype.IntTime(time)}
+	aptmt := domaintype.Appointment{ID: aptmtID.String(), Location: domaintype.Location{ID: locID.String(), Address: address, Note: note}, StartTime: domaintype.IntTime(startTime), EndTime: domaintype.IntTime(endTime)}
 	result := svc.db.Create(&aptmt)
 	if result.Error != nil {
 		return nil, result.Error
