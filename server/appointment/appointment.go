@@ -19,6 +19,16 @@ func NewAppointmentSvc(db *gorm.DB) *Svc {
 	return &Svc{db: db}
 }
 
+// GetAllAppointments gets all Appointments
+func (svc Svc) GetAllAppointments() []*domaintype.Appointment {
+
+	var allAppointments []*domaintype.Appointment
+
+	svc.db.Preload("Location").Find(&allAppointments)
+
+	return allAppointments
+}
+
 // CreateAppointment creates a new appointment
 func (svc Svc) CreateAppointment(time time.Time, address string, note string) (*domaintype.Appointment, error) {
 	if len(address) == 0 {

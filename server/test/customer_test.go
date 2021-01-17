@@ -13,7 +13,6 @@ import (
 	"github.com/can-z/pickup/server/domaintype"
 	"github.com/gin-gonic/gin"
 	"github.com/graphql-go/graphql"
-	"github.com/mitchellh/mapstructure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -104,7 +103,7 @@ func TestCustomer(t *testing.T) {
 		assert.Equal(t, 200, w.Code)
 		json.Unmarshal(w.Body.Bytes(), &res)
 		var cusByID domaintype.Customer
-		mapstructure.Decode(res.Data.(map[string]interface{})["customer"], &cusByID)
+		domaintype.Decode(res.Data.(map[string]interface{})["customer"], &cusByID)
 		assert.Equal(t, cus.ID, cusByID.ID)
 
 		// Test delete customer

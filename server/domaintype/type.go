@@ -56,14 +56,20 @@ func (aat AppointmentActionEnum) Value() (driver.Value, error) {
 type IntTime time.Time
 
 // Scan custom scanner
-func (it IntTime) Scan(value interface{}) error {
-	it = IntTime(time.Unix(value.(int64), 0))
+func (it *IntTime) Scan(value interface{}) error {
+	*it = IntTime(time.Unix(value.(int64), 0))
 	return nil
 }
 
 // Value custom valuer
 func (it IntTime) Value() (driver.Value, error) {
 	return time.Time(it).Unix(), nil
+}
+
+// ToInt returns the unix time as int
+func (it IntTime) ToInt() int {
+	val := time.Time(it).Unix()
+	return int(val)
 }
 
 // all possible actions for an appointment

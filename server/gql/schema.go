@@ -151,9 +151,6 @@ var appointmentType = graphql.NewObject(
 			"time": &graphql.Field{
 				Type: intTimeType,
 			},
-			"customer": &graphql.Field{
-				Type: customerType,
-			},
 			"location": &graphql.Field{
 				Type: locationType,
 			},
@@ -214,6 +211,12 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 			},
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				return customerSvc.GetCustomer(params.Args["id"].(string))
+			},
+		},
+		"appointments": &graphql.Field{
+			Type: graphql.NewList(appointmentType),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return appointmentSvc.GetAllAppointments(), nil
 			},
 		},
 	}
