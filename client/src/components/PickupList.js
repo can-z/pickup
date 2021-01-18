@@ -16,7 +16,7 @@ const PickupListPage: () => Node = () => {
   };
 
   const goToManageCustomersPage: () => void = () => {
-    history.push("/manage-customer");
+    history.push("/customer-list");
   };
 
   let [unselectedCustomers, setUnselectedCustomers] = useState([

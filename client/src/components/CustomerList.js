@@ -1,10 +1,10 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
-import { AiOutlineEdit } from 'react-icons/ai';
 import React from "react";
+import { RiDeleteBin2Line } from 'react-icons/ri';
 import { useHistory } from "react-router-dom";
 
-const MANAGE_CUSTOMERS = gql`
+export const FETCH_CUSTOMER = gql`
 query {
   customers {
     id
@@ -13,18 +13,31 @@ query {
   }
 }
 `;
+   
+const DELETE_CUSTOMER = gql`
+mutation deleteCustomer($id: ID!){
+    deleteCustomer(id: $id){
+    id
+  }}
+`;
 
-const ManageCustomer = () => {
+const CustomerList = () => {
     const history = useHistory();
     const backToLanding = () => {
-    history.push("/");
-    };
-    const ModifyCustomer = () => {
-    history.push("/modify-a-customer")
+        history.push("/");
     };
 
-    const CustomerData = () => {   
-        const {loading, error, data } = useQuery(MANAGE_CUSTOMERS);
+    const CreateCustomer = () => {
+        history.push("/create-a-customer")
+    };  
+
+    const [deleteCustomer] = useMutation(DELETE_CUSTOMER, {
+        refetchQueries: [{query: FETCH_CUSTOMER}],
+    });
+
+    const CustomerData = () => {
+ 
+        const {loading, error, data} = useQuery(FETCH_CUSTOMER);
     
         if(loading) return <tr><td>Loading...</td></tr>;
         if(error) return <tr><td>Loading...</td></tr>;
@@ -35,7 +48,8 @@ const ManageCustomer = () => {
                 <td>{friendlyName}</td>
                 <td>{phoneNumber}</td>
                 <td>
-                    <button type="button" className="btn btn-light mx-1" onClick={ModifyCustomer} ><AiOutlineEdit size={32}/>
+                    <button type="button" className="btn btn-light mx-1" onClick={() => deleteCustomer({variables: {id: id}})} >
+                        <RiDeleteBin2Line size={32}/>
                     </button>
                 </td>
             </tr>
@@ -46,7 +60,7 @@ const ManageCustomer = () => {
          <div>
             
             <div className="container-fluid m-1">
-                <button type="button" className="btn btn-primary mx-1">New Customer</button>
+                <button type="button" className="btn btn-primary mx-1" onClick={CreateCustomer}>New Customer</button>
                 <button type="button" onClick={backToLanding} className="btn btn-secondary mx-1">
                 Back
                 </button>
@@ -72,4 +86,4 @@ const ManageCustomer = () => {
     );
 };
 
-export default ManageCustomer;
+export default CustomerList;
