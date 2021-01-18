@@ -41,7 +41,7 @@ const CustomerCreateForm = () => {
                     <input 
                         type="text" 
                         name="name" 
-                        placeholder="New User"
+                        placeholder=""
                         value={ newCustomerName }
                         onChange={e => (setNewCustomerName(e.target.value))}
                     />
@@ -51,7 +51,7 @@ const CustomerCreateForm = () => {
                     <input 
                         type="text" 
                         name="phonenumber" 
-                        placeholder="e.g. +1(xxx)xxx-xxxx"
+                        placeholder=""
                         value={ newCustomerNumber }
                         onChange={e => (setNewCustomerNumber(e.target.value))}
                     />
