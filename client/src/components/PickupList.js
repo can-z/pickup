@@ -40,11 +40,11 @@ const PickupListPage: () => Node = () => {
     if(loading) return <tr><td>Loading...</td></tr>;
     if(error) return <tr><td>Loading...</td></tr>;
 
-    return data.appointments.map( ({id, startTime, endTime, location, note}) => (
+    return data.appointments.map( ({id, startTime, endTime, location}) => (
         <tr key={id}>
             <td>{startTime} - {endTime}</td>
             <td>{location.address}</td>
-            <td>{note}</td>
+            <td></td>
         </tr>
     ));    
   }
