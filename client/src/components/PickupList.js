@@ -3,10 +3,25 @@
 import "./PickupList.css";
 
 import React, { useState } from "react";
+import { gql, useQuery } from '@apollo/client';
 
 import Autosuggest from "react-autosuggest";
 import type { Node } from "react";
 import { useHistory } from "react-router-dom";
+
+const FETCH_APPOINTMENTS = gql`
+  query {
+    appointments{
+      id
+      startTime
+      endTime
+      location {
+        id
+        address
+      }
+    }
+  }
+`;
 
 const PickupListPage: () => Node = () => {
   let history = useHistory();
@@ -18,6 +33,21 @@ const PickupListPage: () => Node = () => {
   const goToManageCustomersPage: () => void = () => {
     history.push("/customer-list");
   };
+
+  const AppointmentData = () => {
+    const {loading, error, data} = useQuery(FETCH_APPOINTMENTS);
+    
+    if(loading) return <tr><td>Loading...</td></tr>;
+    if(error) return <tr><td>Loading...</td></tr>;
+
+    return data.appointments.map( ({id, startTime, endTime, location}) => (
+        <tr key={id}>
+            <td>{startTime} - {endTime}</td>
+            <td>{location.address}</td>
+            <td></td>
+        </tr>
+    ));    
+  }
 
   let [unselectedCustomers, setUnselectedCustomers] = useState([
     "Roger",
@@ -139,21 +169,7 @@ const PickupListPage: () => Node = () => {
             </tr>
           </thead>
           <tbody>
-            <tr onClick={goToDetailsPage}>
-              <td>11-29 1PM - 1:30PM</td>
-              <td>4 Mallingham Crt, North York, ON</td>
-              <td>Wei</td>
-            </tr>
-            <tr onClick={goToDetailsPage}>
-              <td>11-29 2PM - 3:30PM</td>
-              <td>First Markham Place</td>
-              <td></td>
-            </tr>
-            <tr onClick={goToDetailsPage}>
-              <td>12-15 1PM - 1:30PM</td>
-              <td>Pacific Mall</td>
-              <td>Roger</td>
-            </tr>
+            {AppointmentData()} 
           </tbody>
         </table>
       </div>
