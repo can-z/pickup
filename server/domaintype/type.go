@@ -75,8 +75,7 @@ func (it IntTime) ToInt() int {
 
 // all possible actions for an appointment
 const (
-	Draft AppointmentActionEnum = iota
-	Notified
+	Notified AppointmentActionEnum = iota
 	Accepted
 	CancelledByStore
 	CancelledByCustomer
