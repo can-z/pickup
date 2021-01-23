@@ -29,3 +29,11 @@ func (svc Svc) CreateAppointmentAction(appointmentID string, customerID string, 
 	}
 	return &action, nil
 }
+
+// NotifyCustomers creates a notify action for each upcoming appointment.
+func (svc Svc) NotifyCustomers(customerIDs *[]string) (*[]domaintype.Appointment, error) {
+	currentTime := domaintype.IntTime(time.Now())
+	var upcomingAppointments []domaintype.Appointment
+	svc.db.Where("start_time > ?", currentTime.ToInt()).Find(&upcomingAppointments)
+	return &upcomingAppointments, nil
+}

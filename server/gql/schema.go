@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/mitchellh/mapstructure"
+
 	"github.com/can-z/pickup/server/appointment"
 	"github.com/can-z/pickup/server/appointmentaction"
 	"github.com/can-z/pickup/server/customer"
@@ -322,18 +324,24 @@ func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
 					},
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-					// customerID := params.Args["customerID"].(string)
-					// cus, err := customerSvc.GetCustomer(customerID)
-					// if err != nil {
-					// 	return nil, errors.New("customerID does not exist")
-					// }
-
-					// aptmtID := params.Args["customerID"].(string)
-					// aptmt, err := appointmentSvc.GetAppointment(aptmtID)
-					// if err != nil {
-					// 	return nil, errors.New("customerID does not exist")
-					// }
 					return appointmentActionSvc.CreateAppointmentAction(params.Args["appointmentID"].(string), params.Args["customerID"].(string), params.Args["actionType"].(domaintype.AppointmentActionEnum))
+				},
+			},
+			"notifyCustomers": &graphql.Field{
+				Type:        graphql.NewList(appointmentType),
+				Description: "Create a new appointment action",
+				Args: graphql.FieldConfigArgument{
+					"appointmentID": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.String),
+					},
+					"customerIDs": &graphql.ArgumentConfig{
+						Type: graphql.NewList(graphql.ID),
+					},
+				},
+				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+					var customerIDs []string
+					mapstructure.Decode(params.Args["customerIDs"], &customerIDs)
+					return appointmentActionSvc.NotifyCustomers(&customerIDs)
 				},
 			},
 		}})
