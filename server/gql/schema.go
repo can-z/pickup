@@ -143,48 +143,65 @@ var locationType = graphql.NewObject(
 	},
 )
 
-var appointmentType = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "Appointment",
-		Fields: graphql.Fields{
-			"id": &graphql.Field{
-				Type: graphql.ID,
-			},
-			"startTime": &graphql.Field{
-				Type: intTimeType,
-			},
-			"endTime": &graphql.Field{
-				Type: intTimeType,
-			},
-			"location": &graphql.Field{
-				Type: locationType,
-			},
-		},
-	},
-)
+var appointmentType, appointmentActionType graphql.Type
 
-var appointmentActionType = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "AppointmentAction",
-		Fields: graphql.Fields{
-			"id": &graphql.Field{
-				Type: graphql.ID,
-			},
-			"customer": &graphql.Field{
-				Type: customerType,
-			},
-			"appointment": &graphql.Field{
-				Type: appointmentType,
-			},
-			"actionType": &graphql.Field{
-				Type: appointmentActionEnumType,
-			},
-			"createdAt": &graphql.Field{
-				Type: intTimeType,
-			},
+func init() {
+	appointmentType = graphql.NewObject(
+		graphql.ObjectConfig{
+			Name: "Appointment",
+			Fields: graphql.FieldsThunk(func() graphql.Fields {
+				return graphql.Fields{
+					"id": &graphql.Field{
+						Type: graphql.ID,
+					},
+					"startTime": &graphql.Field{
+						Type: intTimeType,
+					},
+					"endTime": &graphql.Field{
+						Type: intTimeType,
+					},
+					"location": &graphql.Field{
+						Type: locationType,
+					},
+					"actions": &graphql.Field{
+						Type: graphql.NewList(appointmentActionType),
+						Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+							actions := []domaintype.AppointmentAction{
+								domaintype.AppointmentAction{ID: "1", ActionType: domaintype.Notified},
+							}
+							return &actions, nil
+						},
+					},
+				}
+			}),
 		},
-	},
-)
+	)
+
+	appointmentActionType = graphql.NewObject(
+		graphql.ObjectConfig{
+			Name: "AppointmentAction",
+			Fields: graphql.FieldsThunk(func() graphql.Fields {
+				return graphql.Fields{
+					"id": &graphql.Field{
+						Type: graphql.ID,
+					},
+					"customer": &graphql.Field{
+						Type: customerType,
+					},
+					"appointment": &graphql.Field{
+						Type: appointmentType,
+					},
+					"actionType": &graphql.Field{
+						Type: appointmentActionEnumType,
+					},
+					"createdAt": &graphql.Field{
+						Type: intTimeType,
+					},
+				}
+			}),
+		},
+	)
+}
 
 // Schema golint
 func Schema(appConfig domaintype.AppConfig) (*graphql.Schema, *gorm.DB) {
