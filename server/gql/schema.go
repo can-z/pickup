@@ -167,7 +167,7 @@ func init() {
 						Type: graphql.NewList(appointmentActionType),
 						Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 							actions := []domaintype.AppointmentAction{
-								domaintype.AppointmentAction{ID: "1", ActionType: domaintype.Notified},
+								{ID: params.Source.(*domaintype.Appointment).ID, ActionType: domaintype.Notified},
 							}
 							return &actions, nil
 						},
