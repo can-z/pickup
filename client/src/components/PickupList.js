@@ -7,9 +7,10 @@ import { gql, useQuery } from '@apollo/client';
 
 import Autosuggest from "react-autosuggest";
 import type { Node } from "react";
+import moment from 'moment';
 import { useHistory } from "react-router-dom";
 
-const FETCH_APPOINTMENTS = gql`
+export const FETCH_APPOINTMENTS = gql`
   query {
     appointments{
       id
@@ -26,9 +27,9 @@ const FETCH_APPOINTMENTS = gql`
 const PickupListPage: () => Node = () => {
   let history = useHistory();
 
-  const goToDetailsPage: (batchId: string) => void = (batchId: string) => {
-    history.push("/add-pickup");
-  };
+  const goToAddAppointmentPage = () => {
+    history.push("/add-appointment")
+};  
 
   const goToManageCustomersPage: () => void = () => {
     history.push("/customer-list");
@@ -40,13 +41,15 @@ const PickupListPage: () => Node = () => {
     if(loading) return <tr><td>Loading...</td></tr>;
     if(error) return <tr><td>Loading...</td></tr>;
 
-    return data.appointments.map( ({id, startTime, endTime, location}) => (
+    return (
+      data.appointments.map( ({id, startTime, endTime, location}) => (
         <tr key={id}>
-            <td>{startTime} - {endTime}</td>
+            <td>{moment.unix(startTime).format("LLL")} - {moment.unix(endTime).format("LLL")}</td>
             <td>{location.address}</td>
             <td></td>
         </tr>
-    ));    
+    ))
+    )    
   }
 
   let [unselectedCustomers, setUnselectedCustomers] = useState([
@@ -124,9 +127,13 @@ const PickupListPage: () => Node = () => {
   return (
     <div>
       <div className="container-fluid m-1">
-        <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
-          New pickup option
-        </a>
+      <button
+          type="button"
+          onClick={goToAddAppointmentPage}
+          className="btn btn-primary mx-1"
+        >
+          New Pickup Option
+        </button>
         <button
           type="button"
           onClick={goToManageCustomersPage}
@@ -174,9 +181,9 @@ const PickupListPage: () => Node = () => {
         </table>
       </div>
       <div className="container-fluid m-1">
-        <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
+          <button type="button" onClick={goToAddAppointmentPage} className="btn btn-secondary mx-1">
           Finalize and notify
-        </a>
+        </button>
       </div>
     </div>
   );
