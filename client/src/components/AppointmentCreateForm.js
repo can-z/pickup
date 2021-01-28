@@ -33,29 +33,45 @@ const AppointmentCreateForm: () => React$Node = () => {
   const [newFromTime, setNewFromTime] = useState('');
   const [newToTime, setNewToTime] = useState('');
   const [newAddress, setNewAddress] = useState('');
-  const [newNote, setNewNote] = useState('');
+  const [newNote, setNewNote] = useState(' ');
 
-  const [ createAppointment ] = useMutation(CREATE_APPOINTMENT, {
+  const [ createAppointment,
+          {loading:mutationLoading, error: mutationError},
+   ] = useMutation(CREATE_APPOINTMENT, {
     refetchQueries: [{query: FETCH_APPOINTMENTS}],
     onCompleted: () => backToLanding()
   });
-  
+
   const fromTimeInputProps = {
     placeholder: "Click to open time picker",
     id: "pickupFromTime",
+    required: "required"
   };
   const toTimeInputProps = {
     placeholder: "Click to open time picker",
     id: "pickupToTime",
+    required: "required"
   };
+  
+  var startTime = new Date(newFromTime);
+  var endTime = new Date(newToTime);
 
-  console.log(newFromTime);
+  const handleSubmit = () => {
+    if (startTime>=endTime){
+        return [false, alert("Oops, 'End Time' must happen after 'Start time'! \n Please try again.")]
+    }else{
+      return createAppointment({ 
+        variables: {startTime: newFromTime.format('X'), endTime: newToTime.format('X'), address:newAddress, note:newNote }});
+    }
+  };
+ 
+  console.log(startTime);
   
   return (
     <div>
     <form onSubmit={e => {
       e.preventDefault();
-      createAppointment({ variables: {startTime: newFromTime.format('X'), endTime: newToTime.format('X'), address:newAddress, note:newNote }});
+      handleSubmit();
         }}
     >
     <div>
@@ -90,7 +106,9 @@ const AppointmentCreateForm: () => React$Node = () => {
             id="pickupLocation"
             placeholder="Enter address"
             value={newAddress}
-            onChange={e => setNewAddress(e.target.value)}
+            onChange={e => setNewAddress(e.target.value)
+            }
+            required="required"
           />
           </label>
       </div>
@@ -106,7 +124,7 @@ const AppointmentCreateForm: () => React$Node = () => {
           />
           </label>
       </div>
-      <div class="container-fluid m-1">
+      <div className="container-fluid m-1">
         <button type="submit" className="btn btn-primary mx-1">
           Save draft
         </button>
@@ -116,6 +134,8 @@ const AppointmentCreateForm: () => React$Node = () => {
         </div>
       </div>
       </form>   
+      {mutationLoading && <p>Loading...</p>}
+      {mutationError && <p>Error:( Please try again</p>}
     </div>
   );
 };
