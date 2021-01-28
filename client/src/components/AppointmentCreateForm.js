@@ -64,8 +64,6 @@ const AppointmentCreateForm: () => React$Node = () => {
         variables: {startTime: newFromTime.format('X'), endTime: newToTime.format('X'), address:newAddress, note:newNote }});
     }
   };
- 
-  console.log(startTime);
   
   return (
     <div>
