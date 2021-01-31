@@ -12,14 +12,7 @@ import { useHistory } from "react-router-dom";
 const CREATE_APPOINTMENT = gql`
   mutation createAppointment($startTime:Int! $endTime:Int! $address:String! $note:String! ){
     createAppointment(startTime:$startTime, endTime:$endTime, address:$address, note:$note){
-      id,
-      location{
-        id
-        address
-        note
-      },
-      startTime,
-      endTime
+     startTime
   }}
 `;
 
@@ -53,11 +46,11 @@ const AppointmentCreateForm: () => React$Node = () => {
     required: "required"
   };
   
-  var startTime = new Date(newFromTime);
-  var endTime = new Date(newToTime);
+  var startTime = () => newFromTime.format('X');
+  var endTime = () => newToTime.format('X');
 
   const handleSubmit = () => {
-    if (startTime>=endTime){
+    if (startTime()>=endTime()){
         return [false, alert("Oops, 'End Time' must happen after 'Start time'! \n Please try again.")]
     }else{
       return createAppointment({ 
@@ -133,7 +126,7 @@ const AppointmentCreateForm: () => React$Node = () => {
       </div>
       </form>   
       {mutationLoading && <p>Loading...</p>}
-      {mutationError && <p>Error:( Please try again</p>}
+      {mutationError && <p>Error:( We can not accept this appointment.</p>}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import "./PickupList.css";
 import React, { useState } from "react";
 import { gql, useQuery } from '@apollo/client';
 
+import AppointmentData from './AppointmentTable.js';
 import Autosuggest from "react-autosuggest";
 import type { Node } from "react";
 import moment from 'moment';
@@ -34,23 +35,6 @@ const PickupListPage: () => Node = () => {
   const goToManageCustomersPage: () => void = () => {
     history.push("/customer-list");
   };
-
-  const AppointmentData = () => {
-    const {loading, error, data} = useQuery(FETCH_APPOINTMENTS);
-    
-    if(loading) return <tr><td>Loading...</td></tr>;
-    if(error) return <tr><td>Loading...</td></tr>;
-
-    return (
-      data.appointments.map( ({id, startTime, endTime, location}) => (
-        <tr key={id}>
-            <td>{moment.unix(startTime).format("LLL")} - {moment.unix(endTime).format("LLL")}</td>
-            <td>{location.address}</td>
-            <td></td>
-        </tr>
-    ))
-    )    
-  }
 
   let [unselectedCustomers, setUnselectedCustomers] = useState([
     "Roger",
@@ -176,7 +160,7 @@ const PickupListPage: () => Node = () => {
             </tr>
           </thead>
           <tbody>
-            {AppointmentData()} 
+            <AppointmentData />
           </tbody>
         </table>
       </div>
