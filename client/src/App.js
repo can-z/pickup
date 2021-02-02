@@ -5,9 +5,9 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
+import AppointmentCreateForm from "./components/AppointmentCreateForm";
 import CustomerCreateForm from "./components/CustomerCreateForm";
 import CustomerList from "./components/CustomerList";
-import PickupDetail from "./components/PickupDetail";
 import PickupListPage from "./components/PickupList";
 import React from "react";
 
@@ -15,14 +15,14 @@ const App: () => React$Node = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">          
+        <Route exact path="/">
           <PickupListPage />
         </Route>
         <Route exact path="/getting-started">
           <StartingPoint />
         </Route>
-        <Route exact path="/add-pickup">
-          <PickupDetail />
+        <Route exact path="/add-appointment">
+          <AppointmentCreateForm />
         </Route>
         <Route exact path="/customer-list">
           <CustomerList />
@@ -45,7 +45,7 @@ const StartingPoint: () => React$Node = () => {
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"  
+          href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
