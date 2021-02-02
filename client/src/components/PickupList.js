@@ -3,34 +3,18 @@
 import "./PickupList.css";
 
 import React, { useState } from "react";
-import { gql, useQuery } from '@apollo/client';
 
-import AppointmentData from './AppointmentTable.js';
+import AppointmentData from "./AppointmentTable.js";
 import Autosuggest from "react-autosuggest";
 import type { Node } from "react";
-import moment from 'moment';
 import { useHistory } from "react-router-dom";
-
-export const FETCH_APPOINTMENTS = gql`
-  query {
-    appointments{
-      id
-      startTime
-      endTime
-      location {
-        id
-        address
-      }
-    }
-  }
-`;
 
 const PickupListPage: () => Node = () => {
   let history = useHistory();
 
   const goToAddAppointmentPage = () => {
-    history.push("/add-appointment")
-};  
+    history.push("/add-appointment");
+  };
 
   const goToManageCustomersPage: () => void = () => {
     history.push("/customer-list");
@@ -111,7 +95,7 @@ const PickupListPage: () => Node = () => {
   return (
     <div>
       <div className="container-fluid m-1">
-      <button
+        <button
           type="button"
           onClick={goToAddAppointmentPage}
           className="btn btn-primary mx-1"
@@ -151,21 +135,14 @@ const PickupListPage: () => Node = () => {
         <SelectedCustomerList selectedCustomers={selectedCustomers} />
       </div>
       <div className="container-fluid m-1">
-        <table className="table table-hover">
-          <thead className="thead-dark">
-            <tr>
-              <th scope="col">Date</th>
-              <th scope="col">Location</th>
-              <th scope="col">Confirmed customers</th>
-            </tr>
-          </thead>
-          <tbody>
-            <AppointmentData />
-          </tbody>
-        </table>
+        <AppointmentData />
       </div>
       <div className="container-fluid m-1">
-          <button type="button" onClick={goToAddAppointmentPage} className="btn btn-secondary mx-1">
+        <button
+          type="button"
+          onClick={goToAddAppointmentPage}
+          className="btn btn-secondary mx-1"
+        >
           Finalize and notify
         </button>
       </div>

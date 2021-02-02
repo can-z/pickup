@@ -15,7 +15,7 @@ const App: () => React$Node = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">          
+        <Route exact path="/">
           <PickupListPage />
         </Route>
         <Route exact path="/getting-started">
@@ -45,7 +45,7 @@ const StartingPoint: () => React$Node = () => {
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"  
+          href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >

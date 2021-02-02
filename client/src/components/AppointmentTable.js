@@ -1,23 +1,51 @@
-import {FETCH_APPOINTMENTS} from './PickupList';
-import React from 'react';
-import moment from 'moment';
-import { useQuery } from '@apollo/client';
+import FETCH_APPOINTMENTS from "./fetchAppointments";
+import React from "react";
+import moment from "moment";
+import { useQuery } from "@apollo/client";
 
-const AppointmentData = () => {
-    const {loading, error, data} = useQuery(FETCH_APPOINTMENTS);
-    
-    if(loading) return <tr><td>Loading...</td></tr>;
-    if(error) return <tr><td>Something wrong happend :(</td></tr>;
+const AppointmentTable = () => {
+  const AppointmentData = () => {
+    const { loading, error, data } = useQuery(FETCH_APPOINTMENTS);
 
-    return (
-      data.appointments.map( ({id, startTime, endTime, location}) => (
-        <tr key={id}>
-            <td>{moment.unix(startTime).format("LLL")} - {moment.unix(endTime).format("LLL")}</td>
-            <td>{location.address}</td>
-            <td></td>
+    if (loading)
+      return (
+        <tr>
+          <td>Loading...</td>
         </tr>
-    ))
-    )    
-  }
+      );
+    if (error)
+      return (
+        <tr>
+          <td>Something wrong happend :(</td>
+        </tr>
+      );
 
-  export default AppointmentData;
+    return data.appointments.map(({ id, startTime, endTime, location }) => (
+      <tr key={id}>
+        <td>
+          {moment.unix(startTime).format("LLL")} -{" "}
+          {moment.unix(endTime).format("LLL")}
+        </td>
+        <td>{location.address}</td>
+        <td></td>
+      </tr>
+    ));
+  };
+
+  return (
+    <div>
+      <table className="table table-hover">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Location</th>
+            <th scope="col">Confirmed customers</th>
+          </tr>
+        </thead>
+        <tbody>{AppointmentData()}</tbody>
+      </table>
+    </div>
+  );
+};
+
+export default AppointmentTable;
