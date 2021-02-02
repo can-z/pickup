@@ -11,8 +11,6 @@
     "bootstrap": "^4.5.3",
     "flow-bin": "^0.137.0",
     "graphql": "^15.4.0",
-    "moment": "^2.29.1",
-    "prettier": "^2.2.1",
     "react": "^16.13.1",
     "react-autosuggest": "^10.0.3",
     "react-datetime": "^3.0.4",
@@ -44,6 +42,8 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-react-app": "^6.0.0"
+    "eslint-config-react-app": "^6.0.0",
+    "moment": "^2.29.1",
+    "prettier": "^2.2.1"
   }
 }
