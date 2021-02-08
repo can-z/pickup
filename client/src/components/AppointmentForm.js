@@ -9,8 +9,24 @@ const AppointmentForm = (props) => {
   const backToLanding = () => {
     history.push("/");
   };
-  const [newFromTime, setNewFromTime] = useState("");
-  const [newToTime, setNewToTime] = useState("");
+  const defaultFromTime = () => {
+    if (props.fromTime == null) {
+      return "";
+    } else {
+      return moment.unix(props.fromTime).format("DD/MM/YYYY hh:mm");
+    }
+  };
+
+  const defaultToTime = () => {
+    if (props.toTime == null) {
+      return "";
+    } else {
+      return moment.unix(props.toTime).format("DD/MM/YYYY hh:mm");
+    }
+  };
+
+  const [newFromTime, setNewFromTime] = useState(defaultFromTime());
+  const [newToTime, setNewToTime] = useState(defaultToTime);
   const [newAddress, setNewAddress] = useState("");
   const [newNote, setNewNote] = useState(" ");
 
@@ -39,7 +55,7 @@ const AppointmentForm = (props) => {
         ),
       ];
     } else {
-      return props.appointmnetUpdate({
+      return props.appointmentUpdate({
         variables: {
           startTime: fromTime,
           endTime: toTime,
@@ -50,13 +66,13 @@ const AppointmentForm = (props) => {
     }
   };
 
-  const fromTimeValue = () => {
-    if (!props.fromTime) {
-      return newFromTime;
-    } else {
-      return moment.unix(props.fromTime).format("DD/MM/YYYY hh:mm");
-    }
-  };
+  //   const fromTimeValue = () => {
+  //     if (!props.fromTime) {
+  //       return newFromTime;
+  //     } else {
+  //       return moment.unix(props.fromTime).format("DD/MM/YYYY hh:mm");
+  //     }
+  //   };
 
   const toTimeValue = () => {
     if (!props.toTime) {
@@ -90,7 +106,7 @@ const AppointmentForm = (props) => {
                 inputProps={fromTimeInputProps}
                 dateFormat={true}
                 timeFormat={true}
-                value={fromTimeValue()}
+                value={newFromTime}
                 onChange={(value) => setNewFromTime(value)}
               />
             </label>

@@ -59,7 +59,11 @@ const AppointmentDataForm: () => React$Node = (props) => {
 
       return (
         <div>
-          <AppointmentForm appointmnetUpdate={createAppointment} />
+          <AppointmentForm
+            fromTime={null}
+            toTime={null}
+            appointmentUpdate={createAppointment}
+          />
           {/* <div>{FetchAppointmnet()}</div> */}
           {mutationLoading && <p>Loading...{}</p>}
           {mutationError && <p>Error:( Sorry, something wrong happened.</p>}

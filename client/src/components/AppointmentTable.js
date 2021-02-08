@@ -32,7 +32,7 @@ const AppointmentTable = () => {
           {moment.unix(endTime).format("LLL")}
         </td>
         <td>{location.address}</td>
-        <td>{id}</td>
+        <td></td>
       </tr>
     ));
   };
