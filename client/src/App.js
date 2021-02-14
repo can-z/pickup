@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
-import AppointmentDataForm from "./components/AppointmentDataForm";
+import CreateOrUpdateAppointment from "./components/CreateOrUpdateAppointment";
 import CustomerCreateForm from "./components/CustomerCreateForm";
 import CustomerList from "./components/CustomerList";
 import PickupListPage from "./components/PickupList";
@@ -21,8 +21,8 @@ const App: () => React$Node = () => {
         <Route exact path="/getting-started">
           <StartingPoint />
         </Route>
-        <Route exact path="/add-appointment">
-          <AppointmentDataForm />
+        <Route exact path="/appointment">
+          <CreateOrUpdateAppointment />
         </Route>
         <Route exact path="/customer-list">
           <CustomerList />
@@ -31,9 +31,9 @@ const App: () => React$Node = () => {
           <CustomerCreateForm />
         </Route>
         <Route
-          path="/edit-appointment/:userId"
+          path="/appointment/:userId"
           exact
-          component={AppointmentDataForm}
+          component={CreateOrUpdateAppointment}
         ></Route>
       </Switch>
     </Router>

@@ -7,7 +7,7 @@ import { useQuery } from "@apollo/client";
 const AppointmentTable = () => {
   const history = useHistory();
   const goToEditAppointmentPage = (id) => {
-    history.push(`/edit-appointment/${id}`);
+    history.push(`/appointment/${id}`);
   };
   const AppointmentData = () => {
     const { loading, error, data } = useQuery(FETCH_APPOINTMENTS);

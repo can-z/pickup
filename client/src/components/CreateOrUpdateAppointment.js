@@ -41,14 +41,16 @@ const FETCH_APPOINTMENT = gql`
   }
 `;
 
-const AppointmentDataForm: () => React$Node = (props) => {
+const editAppointment = () => {};
+
+const CreateOrUpdateAppointment: () => React$Node = (props) => {
   const history = useHistory();
   const backToLanding = () => {
     history.push("/");
   };
 
   if (props.match === undefined) {
-    const Create = () => {
+    const CreateAppointment = () => {
       const [
         createAppointment,
         { loading: mutationLoading, error: mutationError },
@@ -70,9 +72,9 @@ const AppointmentDataForm: () => React$Node = (props) => {
         </div>
       );
     };
-    return <div>{Create()}</div>;
+    return <div>{CreateAppointment()}</div>;
   } else {
-    const Edit = () => {
+    const EditAppointment = () => {
       const { loading, error, data } = useQuery(FETCH_APPOINTMENT, {
         variables: { id: props.match.params.userId },
       });
@@ -86,13 +88,14 @@ const AppointmentDataForm: () => React$Node = (props) => {
             fromTime={data.appointment.startTime}
             toTime={data.appointment.endTime}
             address={data.appointment.location.address}
+            appointmentUpdate={editAppointment}
           />
         </div>
       );
     };
 
-    return <div>{Edit()}</div>;
+    return <div>{EditAppointment()}</div>;
   }
 };
 
-export default AppointmentDataForm;
+export default CreateOrUpdateAppointment;

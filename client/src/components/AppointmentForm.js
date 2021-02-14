@@ -66,14 +66,6 @@ const AppointmentForm = (props) => {
     }
   };
 
-  //   const fromTimeValue = () => {
-  //     if (!props.fromTime) {
-  //       return newFromTime;
-  //     } else {
-  //       return moment.unix(props.fromTime).format("DD/MM/YYYY hh:mm");
-  //     }
-  //   };
-
   const toTimeValue = () => {
     if (!props.toTime) {
       return newToTime;

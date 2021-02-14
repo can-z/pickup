@@ -13,7 +13,7 @@ const PickupListPage: () => Node = () => {
   let history = useHistory();
 
   const goToAddAppointmentPage = () => {
-    history.push("/add-appointment");
+    history.push("/appointment");
   };
 
   const goToManageCustomersPage: () => void = () => {
