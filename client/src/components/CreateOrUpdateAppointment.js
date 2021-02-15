@@ -72,7 +72,11 @@ const CreateOrUpdateAppointment: () => React$Node = (props) => {
         </div>
       );
     };
-    return <div>{CreateAppointment()}</div>;
+    return (
+      <div>
+        <CreateAppointment />
+      </div>
+    );
   } else {
     const EditAppointment = () => {
       const { loading, error, data } = useQuery(FETCH_APPOINTMENT, {
@@ -94,7 +98,11 @@ const CreateOrUpdateAppointment: () => React$Node = (props) => {
       );
     };
 
-    return <div>{EditAppointment()}</div>;
+    return (
+      <div>
+        <EditAppointment />
+      </div>
+    );
   }
 };
 
