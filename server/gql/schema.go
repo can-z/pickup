@@ -19,20 +19,6 @@ import (
 	"github.com/graphql-go/graphql/language/ast"
 )
 
-var smsType = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "Sms",
-		Fields: graphql.Fields{
-			"username": &graphql.Field{
-				Type: graphql.String,
-			},
-			"body": &graphql.Field{
-				Type: graphql.String,
-			},
-		},
-	},
-)
-
 var intTimeType = graphql.NewScalar(graphql.ScalarConfig{
 	Name:        "IntTimeType",
 	Description: "The `IntTimeType` scalar type represents a time in UNIX timestamp.",
@@ -167,7 +153,7 @@ func init() {
 						Type: graphql.NewList(appointmentActionType),
 						Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 							actions := []domaintype.AppointmentAction{
-								domaintype.AppointmentAction{ID: "1", ActionType: domaintype.Notified},
+								{ID: "1", ActionType: domaintype.Notified},
 							}
 							return &actions, nil
 						},
