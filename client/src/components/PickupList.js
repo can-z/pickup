@@ -3,51 +3,22 @@
 import "./PickupList.css";
 
 import React, { useState } from "react";
-import { gql, useQuery } from '@apollo/client';
 
+import AppointmentData from "./AppointmentTable.js";
 import Autosuggest from "react-autosuggest";
 import type { Node } from "react";
 import { useHistory } from "react-router-dom";
 
-const FETCH_APPOINTMENTS = gql`
-  query {
-    appointments{
-      id
-      startTime
-      endTime
-      location {
-        id
-        address
-      }
-    }
-  }
-`;
-
 const PickupListPage: () => Node = () => {
   let history = useHistory();
 
-  const goToDetailsPage: (batchId: string) => void = (batchId: string) => {
-    history.push("/add-pickup");
+  const goToAddAppointmentPage = () => {
+    history.push("/add-appointment");
   };
 
   const goToManageCustomersPage: () => void = () => {
     history.push("/customer-list");
   };
-
-  const AppointmentData = () => {
-    const {loading, error, data} = useQuery(FETCH_APPOINTMENTS);
-    
-    if(loading) return <tr><td>Loading...</td></tr>;
-    if(error) return <tr><td>Loading...</td></tr>;
-
-    return data.appointments.map( ({id, startTime, endTime, location}) => (
-        <tr key={id}>
-            <td>{startTime} - {endTime}</td>
-            <td>{location.address}</td>
-            <td></td>
-        </tr>
-    ));    
-  }
 
   let [unselectedCustomers, setUnselectedCustomers] = useState([
     "Roger",
@@ -124,9 +95,13 @@ const PickupListPage: () => Node = () => {
   return (
     <div>
       <div className="container-fluid m-1">
-        <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
-          New pickup option
-        </a>
+        <button
+          type="button"
+          onClick={goToAddAppointmentPage}
+          className="btn btn-primary mx-1"
+        >
+          New Pickup Option
+        </button>
         <button
           type="button"
           onClick={goToManageCustomersPage}
@@ -160,23 +135,16 @@ const PickupListPage: () => Node = () => {
         <SelectedCustomerList selectedCustomers={selectedCustomers} />
       </div>
       <div className="container-fluid m-1">
-        <table className="table table-hover">
-          <thead className="thead-dark">
-            <tr>
-              <th scope="col">Date</th>
-              <th scope="col">Location</th>
-              <th scope="col">Confirmed customers</th>
-            </tr>
-          </thead>
-          <tbody>
-            {AppointmentData()} 
-          </tbody>
-        </table>
+        <AppointmentData />
       </div>
       <div className="container-fluid m-1">
-        <a role="button" href="/add-pickup" className="btn btn-primary mx-1">
+        <button
+          type="button"
+          onClick={goToAddAppointmentPage}
+          className="btn btn-secondary mx-1"
+        >
           Finalize and notify
-        </a>
+        </button>
       </div>
     </div>
   );
