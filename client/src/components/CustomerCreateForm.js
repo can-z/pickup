@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 import { FETCH_CUSTOMER } from "./CustomerList";
 import { useHistory } from "react-router-dom";
@@ -24,21 +24,26 @@ const CustomerCreateForm = () => {
   const [newCustomerNumber, setNewCustomerNumber] = useState("");
 
   const [createCustomer] = useMutation(CUSTOMER_CREATE, {
-    refetchQueries: [{ query: FETCH_CUSTOMER }],
-    onCompleted: () => backToCustomerList(),
+    onCompleted: () => {
+      window.location.replace("/customer-list");
+    },
   });
+
+  const handleSubmit = () => {
+    return createCustomer({
+      variables: {
+        friendlyName: newCustomerName,
+        phoneNumber: newCustomerNumber,
+      },
+    });
+  };
 
   return (
     <div className="container-fluid m-1">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          createCustomer({
-            variables: {
-              friendlyName: newCustomerName,
-              phoneNumber: newCustomerNumber,
-            },
-          });
+          handleSubmit();
         }}
       >
         <label>

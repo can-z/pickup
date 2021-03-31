@@ -5,7 +5,6 @@ import "react-datetime/css/react-datetime.css";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
 import AppointmentForm from "./AppointmentForm";
-import FETCH_APPOINTMENTS from "./fetchAppointments";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -55,8 +54,9 @@ const CreateOrUpdateAppointment: () => React$Node = (props) => {
         createAppointment,
         { loading: mutationLoading, error: mutationError },
       ] = useMutation(CREATE_APPOINTMENT, {
-        refetchQueries: [{ query: FETCH_APPOINTMENTS }],
-        onCompleted: () => backToLanding(),
+        onCompleted: () => {
+          window.location.replace("/");
+        },
       });
 
       return (

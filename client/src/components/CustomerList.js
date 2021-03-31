@@ -32,13 +32,12 @@ const CustomerList = () => {
     history.push("/create-a-customer");
   };
 
-  const [deleteCustomer] = useMutation(DELETE_CUSTOMER, {
-    refetchQueries: [{ query: FETCH_CUSTOMER }],
-  });
-
   const CustomerData = () => {
-    const { loading, error, data } = useQuery(FETCH_CUSTOMER);
+    const { loading, error, data, refetch } = useQuery(FETCH_CUSTOMER);
 
+    const [deleteCustomer] = useMutation(DELETE_CUSTOMER, {
+      onCompleted: () => refetch(),
+    });
     if (loading)
       return (
         <tr>
@@ -99,7 +98,9 @@ const CustomerList = () => {
               <th scope="col">Modify</th>
             </tr>
           </thead>
-          <tbody>{CustomerData()}</tbody>
+          <tbody>
+            <CustomerData />
+          </tbody>
         </table>
       </div>
     </div>
