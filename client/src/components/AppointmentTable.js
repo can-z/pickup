@@ -1,9 +1,14 @@
 import FETCH_APPOINTMENTS from "./fetchAppointments";
 import React from "react";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
 const AppointmentTable = () => {
+  const history = useHistory();
+  const goToEditAppointmentPage = (id) => {
+    history.push(`/appointment/${id}`);
+  };
   const AppointmentData = () => {
     const { loading, error, data } = useQuery(FETCH_APPOINTMENTS);
 
@@ -21,7 +26,7 @@ const AppointmentTable = () => {
       );
 
     return data.appointments.map(({ id, startTime, endTime, location }) => (
-      <tr key={id}>
+      <tr key={id} onClick={() => goToEditAppointmentPage(id)}>
         <td>
           {moment.unix(startTime).format("LLL")} -{" "}
           {moment.unix(endTime).format("LLL")}

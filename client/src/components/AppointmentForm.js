@@ -1,57 +1,41 @@
-// @flow
-
-import "react-datetime/css/react-datetime.css";
-
 import React, { useState } from "react";
-import { gql, useMutation } from "@apollo/client";
 
 import Datetime from "react-datetime";
-import FETCH_APPOINTMENTS from "./fetchAppointments";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 
-const CREATE_APPOINTMENT = gql`
-  mutation createAppointment(
-    $startTime: Int!
-    $endTime: Int!
-    $address: String!
-    $note: String!
-  ) {
-    createAppointment(
-      startTime: $startTime
-      endTime: $endTime
-      address: $address
-      note: $note
-    ) {
-      id
-    }
-  }
-`;
-
-const AppointmentCreateForm: () => React$Node = () => {
+const AppointmentForm = (props) => {
   const history = useHistory();
   const backToLanding = () => {
     history.push("/");
   };
+  const defaultFromTime = () => {
+    if (props.fromTime == null) {
+      return "";
+    } else {
+      return moment.unix(props.fromTime).format("DD/MM/YYYY hh:mm");
+    }
+  };
 
-  const [newFromTime, setNewFromTime] = useState("");
-  const [newToTime, setNewToTime] = useState("");
+  const defaultToTime = () => {
+    if (props.toTime == null) {
+      return "";
+    } else {
+      return moment.unix(props.toTime).format("DD/MM/YYYY hh:mm");
+    }
+  };
+
+  const [newFromTime, setNewFromTime] = useState(defaultFromTime());
+  const [newToTime, setNewToTime] = useState(defaultToTime);
   const [newAddress, setNewAddress] = useState("");
   const [newNote, setNewNote] = useState(" ");
-
-  const [
-    createAppointment,
-    { loading: mutationLoading, error: mutationError },
-  ] = useMutation(CREATE_APPOINTMENT, {
-    refetchQueries: [{ query: FETCH_APPOINTMENTS }],
-    onCompleted: () => backToLanding(),
-  });
 
   const fromTimeInputProps = {
     placeholder: "Click to open time picker",
     id: "pickupFromTime",
     required: "required",
   };
+
   const toTimeInputProps = {
     placeholder: "Click to open time picker",
     id: "pickupToTime",
@@ -71,7 +55,7 @@ const AppointmentCreateForm: () => React$Node = () => {
         ),
       ];
     } else {
-      return createAppointment({
+      return props.appointmentUpdate({
         variables: {
           startTime: fromTime,
           endTime: toTime,
@@ -79,6 +63,22 @@ const AppointmentCreateForm: () => React$Node = () => {
           note: newNote,
         },
       });
+    }
+  };
+
+  const toTimeValue = () => {
+    if (!props.toTime) {
+      return newToTime;
+    } else {
+      return moment.unix(props.toTime).format("DD/MM/YYYY hh:mm");
+    }
+  };
+
+  const addressValue = () => {
+    if (!props.address) {
+      return newAddress;
+    } else {
+      return props.address;
     }
   };
 
@@ -111,7 +111,7 @@ const AppointmentCreateForm: () => React$Node = () => {
                 inputProps={toTimeInputProps}
                 dateFormat={true}
                 timeFormat={true}
-                value={newToTime}
+                value={toTimeValue()}
                 onChange={(value) => setNewToTime(value)}
               />
             </label>
@@ -124,7 +124,7 @@ const AppointmentCreateForm: () => React$Node = () => {
                 className="form-control"
                 id="pickupLocation"
                 placeholder="Enter address"
-                value={newAddress}
+                value={addressValue()}
                 onChange={(e) => setNewAddress(e.target.value)}
                 required="required"
               />
@@ -157,10 +157,8 @@ const AppointmentCreateForm: () => React$Node = () => {
           </div>
         </div>
       </form>
-      {mutationLoading && <p>Loading...</p>}
-      {mutationError && <p>Error:( Sorry, something wrong happened.</p>}
     </div>
   );
 };
 
-export default AppointmentCreateForm;
+export default AppointmentForm;
