@@ -6,31 +6,35 @@ import React, { useState } from "react";
 
 import AppointmentData from "./AppointmentTable.js";
 import Autosuggest from "react-autosuggest";
+import FETCH_CUSTOMERS from "./fetchCustomers";
 import type { Node } from "react";
 import { useHistory } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
 const PickupListPage: () => Node = () => {
   let history = useHistory();
 
   const goToAddAppointmentPage = () => {
-    history.push("/appointment");
+    history.push("/add-appointment");
   };
 
   const goToManageCustomersPage: () => void = () => {
     history.push("/customer-list");
   };
 
-  let [unselectedCustomers, setUnselectedCustomers] = useState([
-    "Roger",
-    "Rogers",
-    "Ray",
-    "Wei",
-    "Wei2",
-    "Wei3",
-    "Wei5",
-    "Wei6",
-    "Wei7",
-  ]);
+  // Please help me review #27 - 36
+
+  const CustomerData = () => {
+    const { loading, error, data } = useQuery(FETCH_CUSTOMERS);
+    if (loading) return ["Loading"];
+    if (error) return ["Error"];
+    return data.customers.map(({ friendlyName }) => friendlyName);
+  };
+
+  let [unselectedCustomers, setUnselectedCustomers] = useState(
+    <CustomerData />
+  );
+
   let [customerFieldValue, setCustomerFieldValue] = useState("");
   let [suggestions, setSuggestions] = useState([]);
   let [selectedCustomers, setSelectedCustomers] = useState([]);

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 
-import { FETCH_CUSTOMER } from "./CustomerList";
 import { useHistory } from "react-router-dom";
 
 const CUSTOMER_CREATE = gql`
