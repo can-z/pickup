@@ -1,6 +1,6 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 
-import FETCH_CUSTOMERS from "./fetchCustomers";
+import { FETCH_CUSTOMERS } from "./fetchCustomers";
 import React from "react";
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { useHistory } from "react-router-dom";

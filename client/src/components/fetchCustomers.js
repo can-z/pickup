@@ -9,4 +9,5 @@ const FETCH_CUSTOMERS = gql`
     }
   }
 `;
-export default FETCH_CUSTOMERS;
+
+export { FETCH_CUSTOMERS };
