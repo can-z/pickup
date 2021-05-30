@@ -24,7 +24,9 @@ const CustomerList = () => {
   };
 
   const CustomerData = () => {
-    const { loading, error, data, refetch } = useQuery(FETCH_CUSTOMERS);
+    const { loading, error, data, refetch } = useQuery(FETCH_CUSTOMERS,{
+      fetchPolicy: "no-cache"
+    });
 
     const [deleteCustomer] = useMutation(DELETE_CUSTOMER, {
       onCompleted: () => refetch(),

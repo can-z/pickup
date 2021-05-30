@@ -24,7 +24,7 @@ const CustomerCreateForm = () => {
 
   const [createCustomer] = useMutation(CUSTOMER_CREATE, {
     onCompleted: () => {
-      window.location.replace("/customer-list");
+      backToCustomerList();
     },
   });
 

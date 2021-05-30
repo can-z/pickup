@@ -15,11 +15,6 @@ const host = slashes.concat(window.location.hostname);
 const client: ApolloClient = new ApolloClient({
   uri: host + ":8080/graphql",
   cache: new InMemoryCache(),
-  resolvers: {
-    Query: {
-      customersNameList: () => "Hui",
-    },
-  },
 });
 
 ReactDOM.render(
