@@ -1,18 +1,9 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 
+import { FETCH_CUSTOMERS } from "./fetchCustomers";
 import React from "react";
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
-
-export const FETCH_CUSTOMER = gql`
-  query {
-    customers {
-      id
-      friendlyName
-      phoneNumber
-    }
-  }
-`;
 
 const DELETE_CUSTOMER = gql`
   mutation deleteCustomer($id: ID!) {
@@ -33,7 +24,9 @@ const CustomerList = () => {
   };
 
   const CustomerData = () => {
-    const { loading, error, data, refetch } = useQuery(FETCH_CUSTOMER);
+    const { loading, error, data, refetch } = useQuery(FETCH_CUSTOMERS,{
+      fetchPolicy: "no-cache"
+    });
 
     const [deleteCustomer] = useMutation(DELETE_CUSTOMER, {
       onCompleted: () => refetch(),

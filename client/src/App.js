@@ -21,7 +21,7 @@ const App: () => React$Node = () => {
         <Route exact path="/getting-started">
           <StartingPoint />
         </Route>
-        <Route exact path="/appointment">
+        <Route exact path="/add-appointment">
           <CreateOrUpdateAppointment />
         </Route>
         <Route exact path="/customer-list">

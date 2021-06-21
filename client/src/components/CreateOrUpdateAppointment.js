@@ -44,7 +44,7 @@ const editAppointment = () => {};
 
 const CreateOrUpdateAppointment: () => React$Node = (props) => {
   const history = useHistory();
-  const backToLanding = () => {
+  const backToCustomerList = () => {
     history.push("/");
   };
 
@@ -55,7 +55,7 @@ const CreateOrUpdateAppointment: () => React$Node = (props) => {
         { loading: mutationLoading, error: mutationError },
       ] = useMutation(CREATE_APPOINTMENT, {
         onCompleted: () => {
-          window.location.replace("/");
+          backToCustomerList();
         },
       });
 

@@ -10,7 +10,9 @@ const AppointmentTable = () => {
     history.push(`/appointment/${id}`);
   };
   const AppointmentData = () => {
-    const { loading, error, data } = useQuery(FETCH_APPOINTMENTS);
+    const { loading, error, data } = useQuery(FETCH_APPOINTMENTS,{
+      fetchPolicy: "no-cache"
+    });
 
     if (loading)
       return (
